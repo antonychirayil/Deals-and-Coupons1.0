@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/gateway/ApiZullGatewayMNew.iml" filepath="$PROJECT_DIR$/gateway/ApiZullGatewayMNew.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Eureka-server/Eureka-server.iml" filepath="$PROJECT_DIR$/Eureka-server/Eureka-server.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SpringLogin/SpringLogin.iml" filepath="$PROJECT_DIR$/SpringLogin/SpringLogin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/admin/admin.iml" filepath="$PROJECT_DIR$/admin/admin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/cart/cart.iml" filepath="$PROJECT_DIR$/cart/cart.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/casestudy.iml" filepath="$PROJECT_DIR$/.idea/casestudy.iml" />
+      <module fileurl="file://$PROJECT_DIR$/coupon/coupon.iml" filepath="$PROJECT_DIR$/coupon/coupon.iml" />
+      <module fileurl="file://$PROJECT_DIR$/gateway/gateway.iml" filepath="$PROJECT_DIR$/gateway/gateway.iml" />
+      <module fileurl="file://$PROJECT_DIR$/user/user.iml" filepath="$PROJECT_DIR$/user/user.iml" />
+    </modules>
+  </component>
+</project>

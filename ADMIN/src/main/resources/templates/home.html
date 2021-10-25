@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="default">
+    <head>
+        <title>Spring Security Example</title>
+    </head>
+    <body>
+        <div layout:fragment="content">
+            <h1>Welcome to Top Deals Login Page!</h1>
+<!--            <p>Click<a href="http://localhost:7001/login">here</a> to Login as User</p> <br>-->
+<!--            <p>Click <a th:href="@{/hello}">here</a> to Login as Admin.</p>-->
+
+            <a href="http://localhost:7001/login" class="btn btn-primary btn-lg active" role="button" aria-pressed="true" style="background-color: #1d809f">USER</a><br><br>
+            <a th:href="@{/hello}" class="btn btn-primary btn-lg active" role="button" aria-pressed="true" style="background-color: #1d809f">ADMIN</a>
+        </div>
+    </body>
+</html>
