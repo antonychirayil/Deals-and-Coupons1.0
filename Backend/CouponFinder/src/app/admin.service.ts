@@ -11,4 +11,17 @@ export class AdminService {
   getAllCoupons(){
     return this.http.get<coupon[]>('http://localhost:8100/coupons/coupons/list');
   }
+
+  public AddCoupon(c:coupon){
+    return this.http.post<coupon>("http://localhost:8100/coupons/coupons/add",c);
+  }
+
+  public updateCoupon(user:coupon,id:String){
+    return this.http.post<coupon>("http://localhost:8100/coupons/coupons/update/"+id,user);
+  }
+
+  public DeleteCoupon(id:String){
+    return this.http.delete("http://localhost:8100/coupons/coupons/delete/"+id);
+  }
+
 }

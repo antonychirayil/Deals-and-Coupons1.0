@@ -28,8 +28,8 @@ public class CouponController {
         return "Deleted Successfully";
     }
     @PutMapping(value = "/update/{couponID}")
-    public String updateCoupon(@RequestBody Coupon coupon, @PathVariable String couponID){
-        couponRepository.save(coupon);
-        return "Coupon Updated Successfully";
+    public Coupon updateCoupon(@RequestBody Coupon coupon, @PathVariable String couponID){
+        return couponRepository.save(coupon);
+
     }
 }
