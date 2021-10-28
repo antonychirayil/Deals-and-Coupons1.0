@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="assets/fonts/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.10.0/baguetteBox.min.css">
+    <link rel="stylesheet" href="assets/bootstrap/css/login.css">
 </head>
 
 <body id="page-top" data-bs-spy="scroll" data-bs-target="#mainNav" data-bs-offset="57">
@@ -43,7 +44,7 @@
                 <div class="col offset-lg-8 text-center mx-auto">
                     <h2 class="text-white section-heading">We've got what you need!</h2>
                     <hr class="light my-4">
-                    <p class="text-faded mb-4">Makes Your Shopping Life Easier&nbsp;</p><a class="btn btn-light btn-xl" role="button" href="#services">Join Us</a>
+                    <p class="text-faded mb-4">Makes Your Shopping Life Easier&nbsp;</p><a class="btn btn-light btn-xl" role="button"  data-bs-toggle="modal" data-bs-target="#exampleModal" >Login/Sign-up</a>
                 </div>
             </div>
         </div>
@@ -158,12 +159,160 @@
                 </div>
             </div>
         </div>
+
     </section>
+
+    <div class="modal fade"  id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+      <div class="modal-content" style="width: 60vw;" >
+          <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Login</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body" >
+              <div class="container">
+                  <div class="row">
+                      <div class="col"><div id="main-wrapper" class="container">
+              <div class="row justify-content-center">
+                  <div class="col-xl-10">
+                      <div class="card border-0">
+                          <div class="card-body p-0">
+                              <div class="row no-gutters">
+                                  <div class="col-lg-6">
+                                      <div class="p-5">
+                                          <div class="mb-5">
+                                              <h3 class="h4 font-weight-bold text-theme">Login</h3>
+                                          </div>
+
+                                          <h6 class="h5 mb-0">Welcome back!</h6>
+                                          <p class="text-muted mt-2 mb-5">Enter your email address and password to access admin panel.</p>
+
+                                          <form>
+                                              <div class="form-group">
+                                                  <label for="exampleInputEmail1">Email address</label>
+                                                  <input type="email" class="form-control" id="exampleInputEmail1">
+                                              </div>
+                                              <div class="form-group mb-5">
+                                                  <label for="exampleInputPassword1">Password</label>
+                                                  <input type="password" class="form-control" id="exampleInputPassword1">
+                                              </div>
+                                              <button type="submit" class="btn btn-theme">Login</button>
+                                              <a href="#l" class="forgot-link float-right text-primary">Forgot password?</a>
+                                          </form>
+                                      </div>
+                                  </div>
+
+                                  <div class="col-lg-6 d-none d-lg-inline-block">
+                                      <div class="account-block rounded-right">
+                                          <div class="overlay rounded-right"></div>
+                                          <div class="account-testimonial">
+                                              <p class="lead text-white">"Best investment i made for a long time. Can only recommend it for other users."</p>
+                                              <p>- Admin User</p>
+                                          </div>
+                                      </div>
+                                  </div>
+                              </div>
+
+                          </div>
+                          <!-- end card-body -->
+                      </div>
+                      <!-- end card -->
+
+                      <p class="text-muted text-center mt-3 mb-0">Don't have an account? <a class="text-primary ml-1"  data-bs-toggle="modal" data-bs-target="#exampleModal2">register</a></p>
+
+                      <!-- end row -->
+
+                  </div>
+                  <!-- end col -->
+              </div>
+              <!-- Row -->
+          </div></div>
+                  </div>
+              </div>
+
+          </div>
+          <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+      </div>
+      </div>
+  </div>
+
+  <div class="modal fade"  id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel2" aria-hidden="true">
+    <div class="modal-dialog">
+    <div class="modal-content" style="width: 60vw;" >
+        <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Register</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" >
+            <div class="container">
+                <div class="row">
+                    <div class="col"><div id="main-wrapper" class="container">
+            <div class="row justify-content-center">
+                <div class="col-xl-10">
+                    <div class="card border-0">
+                        <div class="card-body p-0">
+                            <div class="row no-gutters">
+                                <div class="col-lg-6">
+                                    <div class="p-5">
+                                        <div class="mb-5">
+                                            <h3 class="h4 font-weight-bold text-theme">Register</h3>
+                                        </div>
+                                        <h6 class="h5 mb-0">Just Do Register.</h6>
+                                        <p class="text-muted mt-2 mb-5">If You Really Want To Know, Look In The Register.</p>
+                                        <form>
+                                            <div class="form-group">
+                                                <label for="yourName">Your name</label>
+                                                <input type="text" class="form-control" id="yourName" />
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="exampleInputEmail1">Email address</label>
+                                                <input type="email" class="form-control" id="exampleInputEmail1" />
+                                            </div>
+                                            <div class="form-group mb-5">
+                                                <label for="exampleInputPassword1">Password</label>
+                                                <input type="password" class="form-control" id="exampleInputPassword1" />
+                                            </div>
+                                            <button type="submit" class="btn btn-theme">Register</button>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 d-none d-lg-inline-block">
+                                    <div class="account-block rounded-right">
+                                        <div class="overlay rounded-right"></div>
+                                        <div class="account-testimonial">
+                                            <p class="lead text-white">"Best investment i made for a long time. Can only recommend it for other users."</p>
+                                            <p>- Admin User</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end card-body -->
+                    </div>
+                    <!-- end card -->
+                    <p class="text-muted text-center mt-3 mb-0">Already have an account? <a href="login.html" class="text-primary ml-1">login</a></p>
+                    <!-- end row -->
+                </div>
+                <!-- end col -->
+            </div>
+            <!-- Row -->
+        </div></div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+    </div>
+    </div>
+</div>
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>
     <script src="assets/js/bs-init.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.10.0/baguetteBox.min.js"></script>
     <script src="assets/js/creative.js"></script>
+    <app-root></app-root>
 </body>
-
 </html>

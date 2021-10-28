@@ -1,0 +1,186 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top sticky-top">
+  <div class="container-fluid">
+    <a class="navbar-brand text-warning" href="#" >Top Deals</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse " id="navbarNav">
+      <ul class="navbar-nav  ms-auto mb-2 ">
+        <li class="nav-item">
+          <a class="nav-link " aria-current="page" href="#" >Home</a>
+        </li>
+        <li class="nav-item"><a class="nav-link" href="#services">Services</a></li>
+        <li class="nav-item"><a class="nav-link" href="#portfolio">Collab</a></li>
+        <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+        <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+        <li class="nav-item">
+          <a class="nav-link " aria-current="page" routerLink="/coupon" >Coupons</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/admin-dashboard">Admin</a>
+        </li>
+      </ul>
+      <button class="btn btn-warning navbar-button" data-bs-toggle="modal" data-bs-target="#exampleModal">Sign In</button>
+      <!-- <button class="btn btn-warning">Register</button> -->
+    </div>
+  </div>
+</nav>
+
+<!--modelSTART-->
+<div class="modal fade"  id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" >
+  <div class="modal-content" style="width: 40vw;" style="background-color: #ebebeb;">
+      <div class="modal-header">
+      <h5 class="modal-title" id="exampleModalLabel" style="color: rgb(31, 27, 27);">Please SignIn</h5>
+      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body"  >
+
+          <div class="container">
+              <div class="row">
+                  <div class="col"><div id="main-wrapper" class="container">
+          <div class="row justify-content-center">
+              <div class="col-xl-10">
+                  <div class="card border-0" style="background-color: rgb(255, 255, 255);">
+                      <div class="card-body p-0">
+                          <div class="row no-gutters">
+                              <div class="col">
+                                  <div class="p-5">
+                                      <div class="mb-5">
+                                          <h3 class="h4 font-weight-bold text-theme">Login</h3>
+                                      </div>
+
+                                      <h6 class="h5 mb-0">Welcome back!</h6>
+                                      <p class="text-muted mt-2 mb-5">Enter your email address and password to access admin panel.</p>
+
+                                      <form>
+                                          <div class="form-group">
+                                              <label for="exampleInputEmail1">Email address</label>
+                                              <input type="email" class="form-control" id="exampleInputEmail1">
+                                          </div>
+                                          <div class="form-group mb-5">
+                                              <label for="exampleInputPassword1">Password</label>
+                                              <input type="password" class="form-control" id="exampleInputPassword1">
+                                          </div>
+                                          <button type="submit" class="btn btn-dark">Login</button>
+                                          <a href="#l" class="forgot-link float-right text-primary">Forgot password?</a>
+                                      </form>
+                                  </div>
+                              </div>
+                          </div>
+
+                      </div>
+                      <!-- end card-body -->
+                  </div>
+                  <!-- end card -->
+
+                  <p class="text-muted text-center mt-3 mb-0">Don't have an account? <a class="text-primary ml-1"  data-bs-toggle="modal" data-bs-target="#exampleModal2">register</a></p>
+
+                  <!-- end row -->
+
+              </div>
+              <!-- end col -->
+          </div>
+          <!-- Row -->
+      </div></div>
+              </div>
+          </div>
+
+      </div>
+
+  </div>
+  </div>
+</div>
+<!--modelEND-->
+
+
+<div class="modal fade"  id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" >
+  <div class="modal-content" style="width: 40vw;" style="background-color: #ebebeb;">
+      <div class="modal-header">
+      <h5 class="modal-title" id="exampleModalLabel" style="color: rgb(36, 35, 35);">REGISTER HERE</h5>
+      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+
+          <div class="container">
+              <div class="row">
+                  <div class="col"><div id="main-wrapper" class="container">
+          <div class="row justify-content-center">
+              <div class="col-xl-10">
+                  <div class="card border-0"  style="background-color: rgb(255, 255, 255);">
+                      <div class="card-body p-0">
+                          <div class="row no-gutters">
+                              <div class="col">
+                                <div class="p-5">
+                                  <div class="mb-5">
+                                      <h3 class="h4 font-weight-bold text-theme">Register</h3>
+                                  </div>
+                                  <h6 class="h5 mb-0">Just Do Register.</h6>
+                                  <p class="text-muted mt-2 mb-5">If You Really Want To Know, Look In The Register.</p>
+                                  <form>
+                                      <div class="form-group">
+                                          <label for="yourName">Your name</label>
+                                          <input type="text" class="form-control" id="yourName" />
+                                      </div>
+                                      <div class="form-group">
+                                          <label for="exampleInputEmail1">Email address</label>
+                                          <input type="email" class="form-control" id="exampleInputEmail1" />
+                                      </div>
+                                      <div class="form-group mb-5">
+                                          <label for="exampleInputPassword1">Password</label>
+                                          <input type="password" class="form-control" id="exampleInputPassword1" />
+                                      </div>
+                                      <button type="submit" class="btn btn-dark">Register</button>
+                                  </form>
+                              </div>
+                              </div>
+                          </div>
+
+                      </div>
+                      <!-- end card-body -->
+                  </div>
+                  <!-- end card -->
+
+                  <!-- <p class="text-muted text-center mt-3 mb-0">
+                    Already have an account? <br>
+                    <a class="text-primary ml-1">
+                      login
+                    </a>
+                  </p> -->
+                  <!-- end row -->
+
+              </div>
+              <!-- end col -->
+          </div>
+          <!-- Row -->
+      </div></div>
+              </div>
+          </div>
+
+      </div>
+
+  </div>
+  </div>
+</div>
+
+<footer class="container" class="fixed-bottom  sticky-bottom bg-light ">
+  <div >
+      <div class="row">
+          <div class="col-md-4"><span class="copyright">Copyright&nbsp;© DailyDeals 2021</span></div>
+          <div class="col-md-4">
+              <ul class="list-inline social-buttons">
+                  <li class="list-inline-item"><a href="#"><i class="fa fa-twitter"></i></a></li>
+                  <li class="list-inline-item"><a href="#"><i class="fa fa-facebook"></i></a></li>
+                  <li class="list-inline-item"><a href="#"><i class="fa fa-linkedin"></i></a></li>
+              </ul>
+          </div>
+          <div class="col-md-4">
+              <ul class="list-inline quicklinks">
+                  <li class="list-inline-item"><a href="#">Privacy Policy</a></li>
+                  <li class="list-inline-item"><a href="#">Terms of Use</a></li>
+              </ul>
+          </div>
+      </div>
+  </div>
+</footer>
