@@ -1,9 +1,9 @@
-<!-- Modal -->
+<!-- Modal  for Add Coupon-->
 <div class="modal fade" id="AddCouponModel" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Add</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
@@ -32,18 +32,64 @@
               <label for="exampleInputEmail1">Expiry Date</label>
               <input type="email" formControlName="expiryDate" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter expirydate">
             </div>
-          <button type="submit" class="btn btn-primary" (click)="addCoupon()">Add</button>
-          <button type="submit" class="btn btn-primary" data-dismiss="modal" (click)="updateCoupon()">Update</button>
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary" (click)="addCoupon()">Add<!-- Add --></button>
+          <!-- <button type="submit" class="btn btn-primary" data-dismiss="modal" (click)="updateCoupon()">Update</button> -->
+          <!-- Add -->
         </form>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
       </div>
     </div>
   </div>
 </div>
+<!-- End of the Add Coupon Modal -->
+
+<div class="modal fade" id="AddCouponModel2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Update</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="formValue">
+          <div class="form-group">
+              <div class="form-group">
+                  <label for="exampleInputEmail1">ID</label>
+                  <input type="email" formControlName="id"  class="form-control" id="exampleInputEmail1"  aria-describedby="emailHelp" placeholder="Enter id" >
+                </div>
+              <label for="exampleInputEmail1">Provider</label>
+              <input type="email" formControlName="provider" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter provider">
+            </div>
+          <div class="form-group">
+            <label for="exampleInputEmail1">Code</label>
+            <input type="email" formControlName="code" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter code">
+          </div>
+          <div class="form-group">
+              <label for="exampleInputEmail1">Category</label>
+              <input type="email" formControlName="category" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter Category">
+            </div>
+            <div class="form-group">
+              <label for="exampleInputEmail1">Description</label>
+              <input type="email" formControlName="description" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter Description">
+            </div>
+            <div class="form-group">
+              <label for="exampleInputEmail1">Expiry Date</label>
+              <input type="email" formControlName="expiryDate" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter expirydate">
+            </div>
+          <button type="submit" class="btn btn-primary" (click)="addCoupon()">Update<!-- Add --></button>
+          <!-- <button type="submit" class="btn btn-primary" data-dismiss="modal" (click)="updateCoupon()">Update</button> -->
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 
 
 
@@ -81,7 +127,7 @@
           <td><span>{{product.expiryDate}}</span></td>
 
           <td>
-              <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#AddCouponModel" (click)="editCoupon(product)">
+              <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#AddCouponModel2" (click)="editCoupon(product)">
                 <i class="fa fa-edit"></i>Edit</button>
               <button class="btn btn-sm btn-danger" (click)="deleteCoupon(product.id)">
                 <i class="fa fa-remove"></i>Delete</button>
