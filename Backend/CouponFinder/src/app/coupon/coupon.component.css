@@ -1,0 +1,18 @@
+.coupon-card{
+  padding: 0px;
+}
+.coupon-card-element{
+  background-color:#fed136;
+  width: auto;
+}
+.coupon-element1{
+  font-weight: bolder;
+  font-size: larger;
+  padding-top: 23px;
+
+}
+.coupon-element2{
+  font-weight: 500;
+  font-size: medium;
+  padding-top: 23px;
+}
