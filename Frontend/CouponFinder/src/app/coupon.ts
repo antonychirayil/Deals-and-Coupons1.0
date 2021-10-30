@@ -1,3 +1,5 @@
+
+//creating the same class and attribute for the linking with the backend
 export class coupon{
 
   constructor(

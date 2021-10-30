@@ -27,7 +27,7 @@ import { GooglePayButtonModule } from '@google-pay/button-angular';
     HttpClientModule,
     ReactiveFormsModule,
     FormsModule,
-    Ng2SearchPipeModule,
+    Ng2SearchPipeModule, //search bar
     GooglePayButtonModule
   ],
   providers: [],

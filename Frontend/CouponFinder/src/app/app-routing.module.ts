@@ -5,7 +5,9 @@ import { CouponComponent } from './coupon/coupon.component';
 import { HeaderComponent } from './header/header.component';
 
 const routes: Routes = [
-  {path:"header", component:HeaderComponent},{path:"coupon",component:CouponComponent},{path:"admin-dashboard",component:AdminDashboardComponent},
+  {path:"header", component:HeaderComponent},
+  {path:"coupon",component:CouponComponent},
+  {path:"admin-dashboard",component:AdminDashboardComponent},
   {
     path:"",
     redirectTo:"header",
