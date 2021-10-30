@@ -1,4 +1,7 @@
+
+
 <div class="container">
+  <!-- Search bar -->
   <div class="row g-3 align-items-center">
     <div class="col-auto">
       <label class="col-form-label text-white text-bolder">Search : </label>
@@ -7,7 +10,10 @@
       <input type="text"  class="form-control" name="search" [(ngModel)]="searchText" autocomplete="off" placeholder="search">
     </div>
     <div class="col-auto">
-          </div>
+      <span class="form-text text-dark">
+        search by Id, Provider, Code, Category, Description, & ExpiryDate
+      </span>
+    </div>
   </div>
   <div class="row row-cols-1 row-cols-md-4 mb-5 text-center">
 
