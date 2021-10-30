@@ -16,10 +16,11 @@ public class CouponController {
     public List<Coupon> getAllCoupons(){
         return couponRepository.findAll();
     }
+
     @PostMapping(value = "/add")
-    public String addCoupon(@RequestBody Coupon coupon){
-        couponRepository.save(coupon);
-        return "Coupon Added Successfully";
+    public Coupon addCoupon(@RequestBody Coupon coupon){
+        return couponRepository.save(coupon);
+
     }
     @DeleteMapping(value = "/delete/{couponID}")
     public String deleteProduct(@PathVariable String couponID) {
