@@ -95,47 +95,59 @@
 
 <!-- Main Table Structure -->
 
-<div class="generic-container">
-  <div class="panel panel-default">
-    <!-- Default panel contents -->
-    <div class="panel-heading"><span class="lead"><h3>Admin Dashboard</h3></span>
-    </div>
-    <div class="tablecontainer">
-      <div class="border">
-        <button class="btn btn-md btn-outline-primary" data-bs-toggle="modal" data-bs-target="#AddCouponModel">
-          <i class="fa fa-user" ></i>Add Coupon </button>
+<div class="container">
+  <div class="row">
+    <span class="text-center text-bold"><h3>Welcome to Admin Dashboard</h3></span>
+    <div class="row g-3 align-items-center">
+      <div class="col-auto">
+        <label class="col-form-label text-dark text-bolder">Search : </label>
       </div>
-      <table class="table table-hover table-bordered table-striped">
-        <thead>
+      <div class="col-auto search-product">
+        <input type="text"  class="form-control" name="search" [(ngModel)]="searchText" autocomplete="off" placeholder="search">
+      </div>
+      <div class="col-auto">
+        <span class="form-text text-white">
+          search by Id, Provider, Code, Category, Description, & ExpiryDate
+        </span>
+      </div>
+    </div>
+    <div class="text-center">
+      <div class="m-3">
+        <button class="btn btn-md btn-warning" data-bs-toggle="modal" data-bs-target="#AddCouponModel">
+          <i class="fa fa-plus-circle" aria-hidden="true"></i>Add Coupon </button>
+      </div>
+      <div class="table-responsive">
+        <table class="table table-light table-hover">
+          <thead>
+            <tr>
+              <th>Id</th>
+              <th>Provider</th>
+              <th>Code</th>
+              <th>Category</th>
+              <th>Description</th>
+              <th>Expiry Date</th>
+              <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let product of coupons | filter:searchText">
+              <td><span>{{product.id}}</span></td>
+              <td><span>{{product.provider}}</span></td>
+              <td><span>{{product.code}}</span></td>
+              <td><span>{{product.category}}</span></td>
+              <td><span>{{product.description}}</span></td>
+              <td><span>{{product.expiryDate}}</span></td>
 
-        <tr>
-          <th>Id</th>
-          <th>Provider</th>
-          <th>Code</th>
-          <th>Category</th>
-          <th>Description</th>
-          <th>expiryDate</th>
-          <th>Actions</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr *ngFor="let product of coupons">
-          <td><span>{{product.id}}</span></td>
-          <td><span>{{product.provider}}</span></td>
-          <td><span>{{product.code}}</span></td>
-          <td><span>{{product.category}}</span></td>
-          <td><span>{{product.description}}</span></td>
-          <td><span>{{product.expiryDate}}</span></td>
-
-          <td>
-              <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#AddCouponModel2" (click)="editCoupon(product)">
-                <i class="fa fa-edit"></i>Edit</button>
-              <button class="btn btn-sm btn-danger" (click)="deleteCoupon(product.id)">
-                <i class="fa fa-remove"></i>Delete</button>
-           </td>
-        </tr>
-        </tbody>
-      </table>
+              <td>
+                <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#AddCouponModel2" (click)="editCoupon(product)">
+                  <i class="fa fa-pencil" aria-hidden="true"></i></button>
+                <button class="btn btn-sm btn-danger m-2" (click)="deleteCoupon(product.id)">
+                  <i class="fa fa-trash" aria-hidden="true"></i></button>
+              </td>
+            </tr>
+            </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </div>

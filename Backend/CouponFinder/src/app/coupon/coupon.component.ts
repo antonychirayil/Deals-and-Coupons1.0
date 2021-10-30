@@ -15,7 +15,7 @@ export class CouponComponent implements OnInit {
   result: any;
   pcode: any;
   edate:any
-
+  searchText: any;
   constructor(private adminService:AdminService, private fb:FormBuilder) { }
 
 

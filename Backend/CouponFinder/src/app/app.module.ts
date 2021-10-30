@@ -8,7 +8,9 @@ import { HeaderComponent } from './header/header.component';
 import { CouponComponent } from './coupon/coupon.component';
 import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.component';
 import { HttpClientModule } from '@angular/common/http';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { Ng2SearchPipeModule } from 'ng2-search-filter';
+import { GooglePayButtonModule } from '@google-pay/button-angular';
 
 
 @NgModule({
@@ -24,6 +26,9 @@ import { ReactiveFormsModule } from '@angular/forms';
     AppRoutingModule,
     HttpClientModule,
     ReactiveFormsModule,
+    FormsModule,
+    Ng2SearchPipeModule,
+    GooglePayButtonModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,27 +1,37 @@
-
-
-
 <div class="container">
-  <div class="row row-cols-1 row-cols-md-3 mb-3 text-center">
-    <div class="col-sm" *ngFor="let product of coupons">
+  <div class="row g-3 align-items-center">
+    <div class="col-auto">
+      <label class="col-form-label text-white text-bolder">Search : </label>
+    </div>
+    <div class="col-auto search-product">
+      <input type="text"  class="form-control" name="search" [(ngModel)]="searchText" autocomplete="off" placeholder="search">
+    </div>
+    <div class="col-auto">
+          </div>
+  </div>
+  <div class="row row-cols-1 row-cols-md-4 mb-5 text-center">
+
+    <div class="col-sm" *ngFor="let product of coupons | filter:searchText">
 <div  class="p-3" style="margin-left: 20px;">
-  <div class="col-12 shadow mb-3 rounded coupon-card"  style="max-width: 540px;" >
+  <div class="col-12 shadow mb-3 rounded coupon-card"  style="max-width: 500px;" >
     <!-- <div class="row g-0" > -->
       <div class="col-md-3 coupon-card-element rounded-start">
         <div class="coupon-element1 text-center ">
           <!--<p>15% Off</p>-->
-          <p>{{product.description}}</p>
+
+          <p class="flash animated">
+            <img src="https://w7.pngwing.com/pngs/67/521/png-transparent-computer-icons-offers-text-logo-discount.png" class="img-thumbnail"  width="42" height="42" style="vertical-align:top" class="img-fluid" alt="Responsive image">{{product.description}}</p>
         </div>
       </div>
       <div class="col-md-6">
-        <div class="p-2 coupon-element2">
+        <div class="p-2 coupon-element2 text-center">
           <p class="deal-title">{{product.provider}}</p>
           <p class="deal-title">{{product.category}}</p>
         </div>
       </div>
       <div class="col-md-3 text-center coupon-card-element">
         <div class="mt-4">
-          <button type="button" class="btn btn-warning" (click)=updatepcode(product.code,product.expiryDate) data-bs-toggle="modal" data-bs-target="#exampleModal3">
+          <button type="button" class="btn btn-warning" (click)=updatepcode(product.code,product.expiryDate) data-bs-toggle="modal" data-bs-target="#exampleModal3" style="background-color: orange;" >
             Show Code
           </button>
         </div>
@@ -47,12 +57,12 @@
         </div>
         <div class="modal-body">
           <main class="modal__content">
-            <p>Expiry Date: {{edate}}</p>
+            <p ><span style="font-weight: bold;">Expiry Date:</span> {{edate}}</p>
             <div class="code-wrap">
               <div class="code">
-                <p data-copy="SSTKD23MG6">{{pcode}}</p>
+                <p><span style="font-weight: bold;">Coupon: </span>{{pcode}}</p>
               </div>
-              <!-- <btn class="btn btn-primary copy-text">Copy</btn> -->
+              <!-- <button class="btn btn-primary copy-text">Copy</button> -->
             </div>
           </main>
         </div>

@@ -1,3 +1,74 @@
 <app-navbar></app-navbar>
+<footer class="container" class=" fixed-bottom sticky-bottom bg-light ">
+  <div >
+    <div class="row">
+      <div class="col-md-3"><span class="copyright text-warning" style="color: #000000;">Copyright&nbsp;© Top Deals 2021</span></div>
+      <div class="col-md-2">
+          <ul class="list-inline social-buttons">
+              <li class="list-inline-item"><a href="#"><i class="fa fa-instagram"></i></a></li>
+              <li class="list-inline-item"><a href="#"><i class="fa fa-facebook"></i></a></li>
+              <li class="list-inline-item"><a href="#"><i class="fa fa-linkedin"></i></a></li>
+          </ul>
+      </div>
+      <div class="col-md-5">
+          <ul class="list-inline quicklinks">
 
+              <li class="list-inline-item"><span style="color: #000000; padding-left: 500px;">Contribute Now
+                <!-- <i class="fa fa-inr" style="color: #fed136; padding-left: 100px;">100</i> -->
+              </span></li>
+              <!-- <li class="list-inline-item"><a href="#">Terms of Use</a></li> -->
+              <!-- <li class="list-inline-item"><span style="color: #fed136;">to add more features</span></li> -->
+          </ul>
+      </div>
+      <div class="col-md-1">
+        <ul class="list-inline ">
+          <!-- <span style="color: #fed136;">Contribute Now<i class="fa fa-inr" style="color: #fed136; margin-right: 10px;">100</i></span> -->
+            <!-- <li class="list-inline-item"><p style="color: #fed136;">Contribute Now</p></li>
+            <li class="list-inline-item"><i class="fa fa-inr" aria-hidden="true"  style="color: #fed136;">100</i></li> -->
+            <li>
+                  <google-pay-button
+                  environment="TEST"
+                  buttonType="pay"
+                  buttonSizeMode="fill"
+                  buttonColor="white"
+                  [paymentRequest]="{
+                      apiVersion: 2,
+                      apiVersionMinor: 0,
+                      allowedPaymentMethods: [
+                        {
+                          type: 'CARD',
+                          parameters: {
+                            allowedAuthMethods: ['PAN_ONLY', 'CRYPTOGRAM_3DS'],
+                            allowedCardNetworks: ['AMEX', 'VISA', 'MASTERCARD']
+                          },
+                          tokenizationSpecification: {
+                            type: 'PAYMENT_GATEWAY',
+                            parameters: {
+                              gateway: 'example',
+                              gatewayMerchantId: 'exampleGatewayMerchantId'
+                            }
+                          }
+                        }
+                      ],
+                      merchantInfo: {
+                        merchantId: '4466-5170-2400',
+                        merchantName: 'Antony S Chirayil'
+                      },
+                      transactionInfo: {
+                        totalPriceStatus: 'FINAL',
+                        totalPriceLabel: 'Total',
+                        totalPrice: '10.00',
+                        currencyCode: 'INR',
+                        countryCode: 'IN'
+                      }
+                    }"
+                  (loadpaymentdata)="onLoadPaymentData($event)"
+                  >
+                   </google-pay-button>
+            </li>
+        </ul>
+    </div>
+  </div>
+  </div>
+</footer>
 <router-outlet></router-outlet>

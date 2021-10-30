@@ -14,6 +14,8 @@ export class AdminDashboardComponent implements OnInit {
   formValue!:FormGroup;
   userObj : coupon = new coupon("","","","","","");
   result: any;
+  searchText: any;
+
 
   constructor(private adminService:AdminService, private fb:FormBuilder) { }
 
