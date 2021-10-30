@@ -1,6 +1,7 @@
 
 
 <div class="container">
+
   <!-- Search bar -->
   <div class="row g-3 align-items-center">
     <div class="col-auto">
@@ -11,13 +12,18 @@
     </div>
     <div class="col-auto">
       <span class="form-text text-dark">
-        search by Id, Provider, Code, Category, Description, & ExpiryDate
+        Search by Brand, Category & Offer
       </span>
     </div>
   </div>
+  <!-- Search Bar End -->
+
+
   <div class="row row-cols-1 row-cols-md-4 mb-5 text-center">
 
-    <div class="col-sm" *ngFor="let product of coupons | filter:searchText">
+    <div class="col-sm" *ngFor="let product of coupons | filter:searchText"> <!-- iteration + Search pipe -->
+
+
 <div  class="p-3" style="margin-left: 20px;">
   <div class="col-12 shadow mb-3 rounded coupon-card"  style="max-width: 500px;" >
     <!-- <div class="row g-0" > -->
@@ -26,7 +32,8 @@
           <!--<p>15% Off</p>-->
 
           <p class="flash animated">
-            <img src="https://w7.pngwing.com/pngs/67/521/png-transparent-computer-icons-offers-text-logo-discount.png" class="img-thumbnail"  width="42" height="42" style="vertical-align:top" class="img-fluid" alt="Responsive image">{{product.description}}</p>
+            <i class="fa fa-bell-o" aria-hidden="true"></i>
+            {{product.description}}</p>
         </div>
       </div>
       <div class="col-md-6">
