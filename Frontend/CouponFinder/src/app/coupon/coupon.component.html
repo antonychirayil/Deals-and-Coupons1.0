@@ -27,6 +27,7 @@
 
   <!-- Search bar -->
   <div class="row g-3 align-items-center">
+    <p></p>
     <div class="col-auto">
       <label class="col-form-label text-white text-bolder">Search : </label>
     </div>
@@ -44,19 +45,19 @@
 
   <!-- Card Designed Elements -->
 
-  <div class="row row-cols-1 row-cols-md-4 mb-5 text-center">
+  <div class="row row-cols-1 row-cols-md-4 mb-5 text-center ">
 
     <div class="col-sm" *ngFor="let product of coupons | filter:searchText"> <!-- iteration + Search pipe -->
 
 
-<div  class="p-3" style="margin-left: 20px;">
+<div  class="p-3 animated pulse" style="margin-left: 20px;">
   <div class="col-12 shadow mb-3 rounded coupon-card"  style="max-width: 500px;" >
     <!-- <div class="row g-0" > -->
       <div class="col-md-3 coupon-card-element rounded-start">
         <div class="coupon-element1 text-center ">
           <!--<p>15% Off</p>-->
 
-          <p class="flash animated">
+          <p class="flash animated pulse infinite" style="color:rgb(0, 0, 0)">
             <i class="fa fa-bell-o" aria-hidden="true"></i>
             {{product.description}}</p>
         </div>
@@ -69,8 +70,9 @@
       </div>
       <div class="col-md-3 text-center coupon-card-element">
         <div class="mt-4">
-          <button type="button" class="btn btn-warning" (click)=updatepcode(product.code,product.expiryDate) data-bs-toggle="modal" data-bs-target="#exampleModal3" style="background-color: orange;" >
-            Show Code
+          <button type="button" class="btn bg-transparent" (click)=updatepcode(product.code,product.expiryDate) data-bs-toggle="modal" data-bs-target="#exampleModal3" style="background-color: orange;" >
+            <i class="fa fa-envelope-open-o" aria-hidden="true"></i>
+            <!-- Show Code -->
           </button>
         </div>
       </div>

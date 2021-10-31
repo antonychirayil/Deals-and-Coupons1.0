@@ -102,25 +102,27 @@
       <div class="col-auto">
         <label class="col-form-label text-dark text-bolder">Search : </label>
       </div>
+      <!-- Search -->
       <div class="col-auto search-product">
         <input type="text"  class="form-control" name="search" [(ngModel)]="searchText" autocomplete="off" placeholder="search">
       </div>
       <div class="col-auto">
         <span class="form-text text-white">
-          search by Id, Provider, Code, Category, Description, & ExpiryDate
+          search by ID, Provider, Code, Category, Description, & ExpiryDate
         </span>
       </div>
+
     </div>
     <div class="text-center">
       <div class="m-3">
-        <button class="btn btn-md btn-warning" data-bs-toggle="modal" data-bs-target="#AddCouponModel">
+        <button class="btn btn-md btn-warning pulse animated infinite" data-bs-toggle="modal" data-bs-target="#AddCouponModel">
           <i class="fa fa-plus-circle" aria-hidden="true"></i>Add Coupon </button>
       </div>
       <div class="table-responsive">
         <table class="table table-light table-hover">
           <thead>
             <tr>
-              <th>Id</th>
+              <th>ID</th>
               <th>Provider</th>
               <th>Code</th>
               <th>Category</th>
@@ -153,5 +155,6 @@
 </div>
 
 <div>
-  <p>EoP</p>
+  <p></p>
+  <p></p>
 </div>

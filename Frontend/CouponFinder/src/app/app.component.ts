@@ -60,7 +60,7 @@ export class AppComponent {
   signInHandler():void{
     this.authService.signIn(GoogleLoginProvider.PROVIDER_ID).then((data)=>{
       localStorage.setItem('google_auth', JSON.stringify(data));
-      this.router.navigateByUrl('/coupons').then();
+      this.router.navigateByUrl('/coupon').then();
     });
    }
 
