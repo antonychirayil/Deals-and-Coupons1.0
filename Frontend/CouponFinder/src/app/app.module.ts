@@ -34,3 +34,4 @@ import { GooglePayButtonModule } from '@google-pay/button-angular';
   bootstrap: [AppComponent]
 })
 export class AppModule { }
+
