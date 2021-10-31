@@ -17,9 +17,9 @@
         <li class="nav-item">
           <a class="nav-link " aria-current="page" routerLink="/coupon" >Coupons</a>
         </li>
-        <li class="nav-item">
+        <!-- <li class="nav-item">
           <a class="nav-link" routerLink="/admin-dashboard">Admin</a>
-        </li>
+        </li> -->
       </ul>
       <button class="btn btn-warning navbar-button" data-bs-toggle="modal" data-bs-target="#exampleModal">Sign In</button>
       <!-- <button class="btn btn-warning">Register</button> -->
@@ -33,7 +33,7 @@
   <div class="modal-dialog" >
   <div class="modal-content" style="width: 40vw;" style="background-color: #ebebeb;">
       <div class="modal-header">
-      <h5 class="modal-title" id="exampleModalLabel" style="color: rgb(31, 27, 27);">Sign-In</h5>
+      <h5 class="modal-title" id="exampleModalLabel" style="color: rgb(31, 27, 27);">SignIn</h5>
       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body"  >
@@ -55,18 +55,18 @@
                                       <h6 class="h5 mb-0">Welcome back!</h6>
                                       <p class="text-muted mt-2 mb-5">Enter your email address and password to access admin panel.</p>
 
-                                      <form>
-                                          <div class="form-group">
-                                              <label for="exampleInputEmail1">Email address</label>
-                                              <input type="email" class="form-control" id="exampleInputEmail1">
-                                          </div>
-                                          <div class="form-group mb-5">
-                                              <label for="exampleInputPassword1">Password</label>
-                                              <input type="password" class="form-control" id="exampleInputPassword1">
-                                          </div>
-                                          <button type="submit" class="btn btn-dark">Login</button>
-                                          <!-- <a href="#l" class="forgot-link float-right text-primary">Forgot password?</a> -->
-                                      </form>
+                                      <form (ngSubmit)=" login()">
+                                        <div class="form-group">
+                                            <label for="exampleInputEmail1">Email address</label>
+                                            <input type="email" class="form-control" id="exampleInputEmail1" [(ngModel)]="user.useremail">
+                                        </div>
+                                        <div class="form-group mb-5">
+                                            <label for="exampleInputPassword1">Password</label>
+                                            <input type="password" class="form-control" id="exampleInputPassword1" [(ngModel)]="user.password">
+                                        </div>
+                                        <button type="submit" class="btn btn-dark">Login</button>
+                                        <!-- <a href="#l" class="forgot-link float-right text-dark" style="margin-left: 15px;">Forgot password?</a> -->
+                                    </form>
                                   </div>
                               </div>
                           </div>
@@ -76,7 +76,7 @@
                   </div>
                   <!-- end card -->
 
-                  <!-- <p class="text-muted text-center mt-3 mb-0">Don't have an account? <a class="text-primary ml-1"  data-bs-toggle="modal" data-bs-target="#exampleModal2">register</a></p> -->
+                  <p class="text-muted text-center mt-3 mb-0">Don't have an account? <a class="text-primary ml-1"  data-bs-toggle="modal" data-bs-target="#exampleModal2">register</a></p>
 
                   <!-- end row -->
 
@@ -93,10 +93,9 @@
   </div>
   </div>
 </div>
-<!--Modal Login Pop up END-->
+<!--modelEND-->
 
 
-<!-- Modal for Register Pop Up -->
 <div class="modal fade"  id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" >
   <div class="modal-content" style="width: 40vw;" style="background-color: #ebebeb;">
@@ -121,21 +120,34 @@
                                   </div>
                                   <h6 class="h5 mb-0">Just Do Register.</h6>
                                   <p class="text-muted mt-2 mb-5">If You Really Want To Know, Look In The Register.</p>
-                                  <form>
-                                      <div class="form-group">
-                                          <label for="yourName">Your name</label>
-                                          <input type="text" class="form-control" id="yourName" />
-                                      </div>
-                                      <div class="form-group">
-                                          <label for="exampleInputEmail1">Email address</label>
-                                          <input type="email" class="form-control" id="exampleInputEmail1" />
-                                      </div>
-                                      <div class="form-group mb-5">
-                                          <label for="exampleInputPassword1">Password</label>
-                                          <input type="password" class="form-control" id="exampleInputPassword1" />
-                                      </div>
-                                      <button type="submit" class="btn btn-dark">Register</button>
-                                  </form>
+                                  <form (ngSubmit)=" registerUser()">
+                                    <div class="form-group">
+                                        <!-- <label for="yourName">Your name</label>
+                                        <input type="text" class="form-control" id="yourName" [(ngModel)]="user.userid"/> -->
+                                        <label for="email"><b>Email</b></label>
+                                        <input type="text" class="form-control" placeholder="Enter Email" name="email" [(ngModel)]="user.useremail" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <!-- <label for="exampleInputEmail1">Email address</label>
+                                        <input type="email" class="form-control" id="exampleInputEmail1"  [(ngModel)]="user.useremail"/> -->
+                                        <label for="psw"><b>password</b></label>
+                                        <input type="password" class="form-control"  placeholder="Enter Password" name="psw" [(ngModel)]="user.password"  required>
+                                    </div>
+                                    <div class="form-group mb-5">
+                                        <!-- <label for="exampleInputPassword1">Password</label>
+                                        <input type="password" class="form-control" id="exampleInputPassword1"  [(ngModel)]="user.password"/> -->
+                                        <label for="psw-repeat"><b>Confirm Password</b></label>
+                                        <input type="password" class="form-control"  placeholder="Confirm password" name="psw" [(ngModel)]="user.password"  required>
+                                    </div>
+                                    <div class="form-group mb-5">
+                                      <!-- <label for="exampleInputPassword1">Password</label>
+                                      <input type="password" class="form-control" id="exampleInputPassword1"  [(ngModel)]="user.password"/> -->
+                                      <label>
+                                        <input type="checkbox" checked="checked" name="remember" style="margin-bottom:15px"> Remember me
+                                      </label>
+                                  </div>
+                                    <button type="submit" class="btn btn-dark">Register</button>
+                                </form>
                               </div>
                               </div>
                           </div>
@@ -166,5 +178,3 @@
   </div>
   </div>
 </div>
-<!-- Modal For Register End -->
-
