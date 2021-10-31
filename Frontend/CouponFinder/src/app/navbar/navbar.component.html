@@ -8,7 +8,7 @@
     <div class="collapse navbar-collapse " id="navbarNav">
       <ul class="navbar-nav  ms-auto mb-2 ">
         <li class="nav-item">
-          <a class="nav-link " aria-current="page" href="#" >Home</a>
+          <a class="nav-link " aria-current="page" href="#" ><i class="fa fa-home" aria-hidden="true"></i></a>
         </li>
         <li class="nav-item"><a class="nav-link" href="#services">Services</a></li> <!--href links to the single page items-->
         <li class="nav-item"><a class="nav-link" href="#portfolio">Collab</a></li>
@@ -28,7 +28,7 @@
 </nav>
 <!-- Navigation Bar End -->
 
-<!--Modal For Login Pop Up-->
+<!--Admin Login Pop Up-->
 <div class="modal fade"  id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" >
   <div class="modal-content" style="width: 40vw;" style="background-color: #ebebeb;">
@@ -76,7 +76,7 @@
                   </div>
                   <!-- end card -->
 
-                  <p class="text-muted text-center mt-3 mb-0">Don't have an account? <a class="text-primary ml-1"  data-bs-toggle="modal" data-bs-target="#exampleModal2">register</a></p>
+                  <!-- <p class="text-muted text-center mt-3 mb-0">Don't have an account? <a class="text-primary ml-1"  data-bs-toggle="modal" data-bs-target="#exampleModal2">register</a></p> -->
 
                   <!-- end row -->
 
@@ -93,14 +93,14 @@
   </div>
   </div>
 </div>
-<!--modelEND-->
+<!--Login Pop Up End-->
 
-
+<!-- Admin Regisration -->
 <div class="modal fade"  id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" >
   <div class="modal-content" style="width: 40vw;" style="background-color: #ebebeb;">
       <div class="modal-header">
-      <h5 class="modal-title" id="exampleModalLabel" style="color: rgb(36, 35, 35);">REGISTER HERE</h5>
+      <h5 class="modal-title" id="exampleModalLabel" style="color: rgb(36, 35, 35);">Admin Sign Up</h5>
       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
@@ -116,10 +116,10 @@
                               <div class="col">
                                 <div class="p-5">
                                   <div class="mb-5">
-                                      <h3 class="h4 font-weight-bold text-theme">Register</h3>
+                                      <h3 class="h4 font-weight-bold text-theme">Admin Register</h3>
                                   </div>
                                   <h6 class="h5 mb-0">Just Do Register.</h6>
-                                  <p class="text-muted mt-2 mb-5">If You Really Want To Know, Look In The Register.</p>
+                                  <p class="text-muted mt-2 mb-5">Only for Administrators</p>
                                   <form (ngSubmit)=" registerUser()">
                                     <div class="form-group">
                                         <!-- <label for="yourName">Your name</label>
@@ -130,7 +130,7 @@
                                     <div class="form-group">
                                         <!-- <label for="exampleInputEmail1">Email address</label>
                                         <input type="email" class="form-control" id="exampleInputEmail1"  [(ngModel)]="user.useremail"/> -->
-                                        <label for="psw"><b>password</b></label>
+                                        <label for="psw"><b>Password</b></label>
                                         <input type="password" class="form-control"  placeholder="Enter Password" name="psw" [(ngModel)]="user.password"  required>
                                     </div>
                                     <div class="form-group mb-5">
@@ -178,3 +178,4 @@
   </div>
   </div>
 </div>
+<!-- End -->

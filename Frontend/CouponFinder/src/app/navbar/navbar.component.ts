@@ -38,6 +38,7 @@ export class NavbarComponent implements OnInit {
       this.msg="Enter valid email and password";
     }
   }
+
   registerUser(){
     this.userservice.registerUser(this.user).subscribe(
       data =>{
