@@ -46,7 +46,7 @@ export class NavbarComponent implements OnInit {
         this.msg= "registration success"
       },
       error =>{
-        alert("exception occured");
+        alert("Exception occured: Admin Already Registered");
         this.msg=error.error;
 
       }
