@@ -10,7 +10,7 @@ export class AdminService {
 
   //get all the coupon list
   getAllCoupons(){
-    return this.http.get<coupon[]>('http://localhost:8100/coupons/coupons/list');
+    return this.http.get<coupon[]>('http://localhost:8100/admin/admin/listCoupon');
   }
 
   //adds all the coupons
