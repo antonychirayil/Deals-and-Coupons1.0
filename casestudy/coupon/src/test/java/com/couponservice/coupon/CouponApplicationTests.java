@@ -25,11 +25,11 @@ class CouponApplicationTests {
 
     @Test
     public void getAllCouponsTest() {
-        when(couponRepository.findAll()).thenReturn(
+        when(couponRepository.findAll()).thenReturn(   //return the list of records
                 Stream.of(
                                 new Coupon("", "amazon", "amaz12", "mobiles", "10% offer","12-10-2021"))
                         .collect(Collectors.toList()));
-        assertEquals(1, couponController.getAllCoupons().size());
+        assertEquals(1, couponController.getAllCoupons().size());//we comparing it with the size
 
     }
 
