@@ -81,6 +81,7 @@ export class AdminDashboardComponent implements OnInit {
     console.log("in delete method")
     this.adminService.DeleteCoupon(id).subscribe(res=>{this.result=res});
    console.log("deleted User")
+   alert("deleted Coupon sucessfully");
     this.ngOnInit();
 
 
@@ -89,6 +90,10 @@ export class AdminDashboardComponent implements OnInit {
   getCoupons(){
     console.log('Test Call');
      this.adminService.getAllCoupons().subscribe(res=>{this.coupons=res});
+}
+
+SignOutadmin(){
+  alert("Signout Sucessfully")
 }
 
 }

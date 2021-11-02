@@ -45,6 +45,7 @@ export class AppComponent {
   };
   onLoadPaymentData(event:any){
     console.log("Load Payment Data",event.detail)
+    alert("Payment Succesfull")
   }
 
   constructor(
@@ -61,6 +62,7 @@ export class AppComponent {
     this.authService.signIn(GoogleLoginProvider.PROVIDER_ID).then((data)=>{
       localStorage.setItem('google_auth', JSON.stringify(data));
       this.router.navigateByUrl('/coupon').then();
+      alert("Sign In Successfull")
     });
    }
 
