@@ -1,10 +1,12 @@
-<!-- Modal  for Add Coupon-->
 
+<!-- SignOut -->
 <div>
   <!-- <button class="btn btn-light" style="width: 150px;"><a href="/header">SignOut</a></button> -->
   <a class="btn btn-warning" href="#" role="button" (click)="SignOutadmin()">SignOut</a>
 </div>
 
+
+<!-- Add Button -->
 <div class="modal fade" id="AddCouponModel" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -146,6 +148,7 @@
               <td>
                 <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#AddCouponModel2" (click)="editCoupon(product)">
                   <i class="fa fa-pencil" aria-hidden="true"></i></button>
+
                 <button class="btn btn-sm btn-danger m-2" (click)="deleteCoupon(product.id)">
                   <i class="fa fa-trash" aria-hidden="true"></i></button>
               </td>

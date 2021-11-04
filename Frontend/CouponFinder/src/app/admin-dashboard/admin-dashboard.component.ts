@@ -11,10 +11,12 @@ import { coupon } from '../coupon';
 export class AdminDashboardComponent implements OnInit {
 
   coupons: coupon[]= [];
+
   formValue!:FormGroup;
+
   userObj : coupon = new coupon("","","","","","");
   result: any;
-  searchText: any; //initialise
+  searchText: any; //initialise for search
 
 
   constructor(private adminService:AdminService, private fb:FormBuilder) { }

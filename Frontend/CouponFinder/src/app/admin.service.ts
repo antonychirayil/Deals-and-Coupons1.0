@@ -20,7 +20,7 @@ export class AdminService {
 
   //updates  the coupon by id
   public updateCoupon(user:coupon,id:String){
-    return this.http.post<coupon>("http://localhost:8100/coupons/coupons/update/"+id,user);
+    return this.http.put<coupon>("http://localhost:8100/coupons/coupons/update/"+id,user);
   }
 
 

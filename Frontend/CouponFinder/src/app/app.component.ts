@@ -32,7 +32,7 @@ export class AppComponent {
       }
     ],
     merchantInfo: {
-      merchantId: '4466-5170-2400',
+      merchantId: 'XXXX-XXXX-XXXX',
       merchantName: 'Antony S Chirayil'
     },
     transactionInfo: {

@@ -20,6 +20,8 @@ export class NavbarComponent implements OnInit {
   public totalItem : number = 0;
   public searchTerm !: string;
   loginusers = new User();
+
+
   constructor(private userservice : UserService, private router:Router ,private fb:FormBuilder) { }
   // constructor(private userservice : UserService, private router:Router ) { }
 
@@ -33,22 +35,7 @@ export class NavbarComponent implements OnInit {
 
   }
 
-  // login(){
-  //   if(this.userservice.loginUser(this.user)){
-  //     this.userservice.loginUser(this.user).subscribe(
-  //       (data:User)=>{
-  //         alert("Sign in successfully")
-  //         this.user=data;
-  //         this.router.navigate(['/admin-dashboard']);
-  //         //this.redirect();
-  //       }
 
-  //     );}
-  //   else{
-  //     alert("Invalid Login Credentials");
-  //     this.msg="Enter valid email and password";
-  //   }
-  // }
   login(){
     this.userservice.getUser(this.loginForm.value.useremail).subscribe(
       res=>{
