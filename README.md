@@ -1,8 +1,10 @@
 # Deals-and-Coupons1.0
 
-Part of Capgemini Training -- A casestudy on Deals and Coupon1.0 --
+Part of Capgemini Training
+### A casestudy on Deals and Coupons
 
 Flow :-
+
 ->open the website
 ->Home page contains some detailed information of the website,About us,Services,Contact and Some data about the webpage)
 ->Login/register
