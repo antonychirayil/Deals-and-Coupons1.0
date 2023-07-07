@@ -31,5 +31,3 @@ Admin
 1)Register
 2)Login
 3)CRUD
-
-contact: antonyschirayil@gmail.com for more info:
