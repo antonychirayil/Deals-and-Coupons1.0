@@ -1,0 +1,45 @@
+<h1>Browse coupons</h1>
+
+<div class="filters">
+  <!-- #search is a template reference variable: it lets us read the input's value right here -->
+  <input
+    #search
+    type="search"
+    class="search"
+    placeholder="Search by store or description…"
+    (input)="searchText.set(search.value)"
+  />
+
+  <div class="chips">
+    @for (category of categories(); track category) {
+      <button
+        type="button"
+        class="chip"
+        [class.active]="category === selectedCategory()"
+        (click)="selectedCategory.set(category)"
+      >
+        {{ category }}
+      </button>
+    }
+  </div>
+</div>
+
+@if (loading()) {
+  <p class="status">Loading coupons…</p>
+} @else if (errorMessage()) {
+  <div class="status error">
+    <p>{{ errorMessage() }}</p>
+    <button class="btn" type="button" (click)="loadCoupons()">Try again</button>
+  </div>
+} @else {
+  <p class="count">{{ filteredCoupons().length }} of {{ coupons().length }} coupons</p>
+
+  <div class="grid">
+    <!-- track tells Angular how to recognise each item, so it only re-draws what changed -->
+    @for (coupon of filteredCoupons(); track coupon.id) {
+      <app-coupon-card [coupon]="coupon" />
+    } @empty {
+      <p class="status">No coupons match your search.</p>
+    }
+  </div>
+}

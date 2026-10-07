@@ -1,0 +1,50 @@
+.navbar {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+
+.nav-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+}
+
+.brand {
+  font-weight: 700;
+  font-size: 1.15rem;
+  color: var(--text);
+  white-space: nowrap; /* keep the name on one line */
+}
+
+.links {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.links a {
+  padding: 0.5rem 0.9rem;
+  border-radius: 8px;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.links a:hover {
+  background: var(--bg);
+}
+
+.links a.active {
+  color: var(--primary);
+  background: var(--primary-soft);
+}
+
+/* Media query: these rules only apply on screens 480px wide or less (phones) */
+@media (max-width: 480px) {
+  .brand {
+    font-size: 1rem;
+  }
+
+  .links a {
+    padding: 0.5rem 0.6rem;
+  }
+}

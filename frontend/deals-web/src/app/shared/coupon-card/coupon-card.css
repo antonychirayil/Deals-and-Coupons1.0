@@ -1,0 +1,72 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  height: 100%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.25rem;
+}
+
+.card.expired {
+  opacity: 0.6;
+}
+
+.top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.provider {
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.discount {
+  background: #dcfce7;
+  color: var(--success);
+  font-weight: 700;
+  font-size: 0.85rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+}
+
+.description {
+  margin: 0;
+  flex: 1; /* pushes the button to the bottom so cards line up */
+}
+
+.meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.category {
+  background: var(--bg);
+  padding: 0.1rem 0.5rem;
+  border-radius: 6px;
+}
+
+.code {
+  text-align: center;
+  font-family: ui-monospace, Consolas, monospace;
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  padding: 0.55rem;
+  border: 2px dashed var(--primary);
+  border-radius: 8px;
+  color: var(--primary);
+  background: var(--primary-soft);
+}
+
+.expired-label {
+  margin: 0;
+  text-align: center;
+  color: var(--danger);
+  font-weight: 600;
+}

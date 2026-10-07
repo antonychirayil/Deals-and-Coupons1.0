@@ -1,0 +1,11 @@
+<header class="navbar">
+  <nav class="container nav-inner">
+    <a routerLink="/" class="brand">🏷️ Deals &amp; Coupons</a>
+
+    <div class="links">
+      <!-- routerLink changes the page WITHOUT reloading; routerLinkActive adds a CSS class on the current page -->
+      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Home</a>
+      <a routerLink="/coupons" routerLinkActive="active">Coupons</a>
+    </div>
+  </nav>
+</header>

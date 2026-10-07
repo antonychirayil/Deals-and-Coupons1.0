@@ -1,0 +1,18 @@
+<section class="hero">
+  <h1>Save money on every order</h1>
+  <p>Hand-picked coupons and deals from top online stores, all in one place.</p>
+  <a routerLink="/coupons" class="btn">Browse coupons</a>
+</section>
+
+<section>
+  <h2>How it works</h2>
+  <div class="steps">
+    @for (step of steps; track step.title) {
+      <div class="step">
+        <div class="icon">{{ step.icon }}</div>
+        <h3>{{ step.title }}</h3>
+        <p>{{ step.text }}</p>
+      </div>
+    }
+  </div>
+</section>
