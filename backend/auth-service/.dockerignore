@@ -1,0 +1,7 @@
+# Files Docker should NOT copy into the build (smaller, faster, no secrets)
+target/
+.mvn/
+mvnw
+mvnw.cmd
+*.http
+.env

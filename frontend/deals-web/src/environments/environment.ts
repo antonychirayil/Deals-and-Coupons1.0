@@ -1,4 +1,6 @@
-// Used by "ng build" (production). Phase 9 will point this at the deployed gateway.
+// Used by "ng build" (production, e.g. the Docker image).
+// "/api" is relative: the browser calls the same address the site came from, and nginx
+// forwards it to the gateway (see nginx.conf). The interceptor matches URLs starting with "/api".
 export const environment = {
-  apiUrl: 'http://localhost:8080/api',
+  apiUrl: '/api',
 };
