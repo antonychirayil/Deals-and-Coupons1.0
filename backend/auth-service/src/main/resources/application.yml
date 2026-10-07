@@ -1,0 +1,39 @@
+spring:
+  application:
+    name: auth-service
+
+  # Same .env as coupon-service (see coupon-service/application.yml for why two paths)
+  config:
+    import: optional:file:../../.env[.properties],optional:file:.env[.properties]
+
+  mongodb:
+    uri: mongodb://${MONGO_ROOT_USERNAME}:${MONGO_ROOT_PASSWORD}@localhost:27017/deals_db?authSource=admin
+
+  data:
+    mongodb:
+      auto-index-creation: true # unique index on email
+
+server:
+  port: 8082
+
+# Our own settings (not built into Spring). Read in the code with @Value("${app.jwt.secret}").
+app:
+  jwt:
+    secret: ${JWT_SECRET}          # at least 32 characters, kept in .env
+    expiry-minutes: 60             # how long a login token stays valid
+  admin:
+    email: ${ADMIN_EMAIL}          # an ADMIN account is created at startup if missing
+    password: ${ADMIN_PASSWORD}
+
+logging:
+  level:
+    com.deals: DEBUG
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: always

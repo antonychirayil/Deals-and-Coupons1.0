@@ -1,0 +1,62 @@
+### Variables
+@baseUrl = http://localhost:8082/api/auth
+
+### 1. Register a new user -> 201 Created (no password in the response!)
+POST {{baseUrl}}/register
+Content-Type: application/json
+
+{
+  "name": "Asha",
+  "email": "asha@mail.com",
+  "password": "password123"
+}
+
+### 2. Register the same email again -> 409 Conflict
+POST {{baseUrl}}/register
+Content-Type: application/json
+
+{
+  "name": "Asha Again",
+  "email": "ASHA@mail.com",
+  "password": "password123"
+}
+
+### 3. Invalid register -> 400 with field errors
+POST {{baseUrl}}/register
+Content-Type: application/json
+
+{
+  "name": "",
+  "email": "not-an-email",
+  "password": "short"
+}
+
+### 4. Login -> 200 with a token. The "# @name" line lets later requests reuse the response.
+# @name login
+POST {{baseUrl}}/login
+Content-Type: application/json
+
+{
+  "email": "asha@mail.com",
+  "password": "password123"
+}
+
+### 5. Wrong password -> 401 (same message as an unknown email)
+POST {{baseUrl}}/login
+Content-Type: application/json
+
+{
+  "email": "asha@mail.com",
+  "password": "wrong-password"
+}
+
+### 6. Who am I? Uses the token from request 4 automatically -> 200
+GET {{baseUrl}}/me
+Authorization: Bearer {{login.response.body.token}}
+
+### 7. Who am I, with no token -> 401
+GET {{baseUrl}}/me
+
+### 8. Who am I, with a tampered token -> 401
+GET {{baseUrl}}/me
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoYWNrZXIiLCJyb2xlIjoiQURNSU4ifQ.fake-signature
