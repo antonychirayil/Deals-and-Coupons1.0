@@ -3,7 +3,7 @@
 
 @gateway = http://localhost:8080
 
-### 1. Browse coupons - public, no token -> 200
+### 1. Browse coupons as a GUEST - public, no token -> 200, but every "code" is null
 GET {{gateway}}/api/coupons
 
 ### 2. Log in as a normal user (register first via auth-service/requests.http if needed)
@@ -25,6 +25,10 @@ Content-Type: application/json
   "email": "admin@deals.local",
   "password": "PASTE_ADMIN_PASSWORD_FROM_.env"
 }
+
+### 3b. Browse coupons LOGGED IN -> the same list, now with the codes filled in
+GET {{gateway}}/api/coupons
+Authorization: Bearer {{user.response.body.token}}
 
 ### 4. Create a coupon with NO token -> 401 (who are you?)
 POST {{gateway}}/api/coupons
