@@ -1,16 +1,90 @@
-# Local development database.
-# Start:  docker compose up -d      Stop:  docker compose down
+# Two ways to use this file (run from the project root):
+#
+#   docker compose up -d                          -> only MongoDB, for running the services from VS Code
+#   docker compose --profile app up -d --build    -> EVERYTHING: MongoDB + 4 services + website on http://localhost
+#
+# Stop:  docker compose --profile app down        (your data stays in the "mongo-data" volume)
+#
+# Inside Docker, containers find each other by their service NAME (mongodb, gateway-service, ...),
+# which is why the addresses below are not "localhost".
+
 services:
   mongodb:
     image: mongo:8
     container_name: deals-mongodb
     ports:
-      - "27017:27017"
+      - "27017:27017" # open on your PC so VS Code-started services and the MongoDB extension can connect
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USERNAME}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD}
     volumes:
       - mongo-data:/data/db
+    healthcheck: # "healthy" once MongoDB answers a ping; the services below wait for that
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping')"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  # ===== Everything below only starts with:  --profile app =====
+  # None of these have "ports:", so they can't be reached from your PC directly -
+  # only through the website container (and from each other on Docker's private network).
+
+  coupon-service:
+    profiles: [app]
+    build: ./backend/coupon-service
+    container_name: deals-coupon-service
+    env_file: .env # MONGO_ROOT_*, JWT_SECRET ...
+    environment:
+      MONGO_HOST: mongodb
+    depends_on:
+      mongodb:
+        condition: service_healthy
+
+  auth-service:
+    profiles: [app]
+    build: ./backend/auth-service
+    container_name: deals-auth-service
+    env_file: .env # also ADMIN_EMAIL / ADMIN_PASSWORD
+    environment:
+      MONGO_HOST: mongodb
+    depends_on:
+      mongodb:
+        condition: service_healthy
+
+  user-service:
+    profiles: [app]
+    build: ./backend/user-service
+    container_name: deals-user-service
+    env_file: .env
+    environment:
+      MONGO_HOST: mongodb
+      COUPON_SERVICE_URL: http://coupon-service:8081
+    depends_on:
+      mongodb:
+        condition: service_healthy
+
+  gateway-service:
+    profiles: [app]
+    build: ./backend/gateway-service
+    container_name: deals-gateway-service
+    env_file: .env
+    environment:
+      AUTH_SERVICE_URL: http://auth-service:8082
+      COUPON_SERVICE_URL: http://coupon-service:8081
+      USER_SERVICE_URL: http://user-service:8083
+    depends_on:
+      - coupon-service
+      - auth-service
+      - user-service
+
+  frontend:
+    profiles: [app]
+    build: ./frontend/deals-web
+    container_name: deals-frontend
+    ports:
+      - "80:80" # the ONE open port: http://localhost
+    depends_on:
+      - gateway-service
 
 volumes:
   mongo-data:
