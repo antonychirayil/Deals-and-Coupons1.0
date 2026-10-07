@@ -9,6 +9,7 @@
     "mongodb.mongodb-vscode",
     "humao.rest-client",
     "eamodio.gitlens",
-    "sonarsource.sonarlint-vscode"
+    "sonarsource.sonarlint-vscode",
+    "bierner.markdown-mermaid"
   ]
 }

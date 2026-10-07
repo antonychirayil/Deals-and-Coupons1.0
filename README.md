@@ -1,8 +1,13 @@
 # Deals & Coupons
 
+[![CI](https://github.com/antonychirayil/Deals-and-Coupons1.0/actions/workflows/ci.yml/badge.svg)](https://github.com/antonychirayil/Deals-and-Coupons1.0/actions/workflows/ci.yml)
+
 A coupon website built as **Java Spring Boot microservices** with an **Angular** frontend.
 Anyone can browse coupons from popular Indian online stores; **signing up (free) unlocks the coupon codes**, and
 logged-in users can save coupons for later. Admins manage the coupons from a dashboard.
+
+> 📘 **New to the project?** Read the beginner-friendly **[guide](docs/GUIDE.md)**: architecture diagrams,
+> every building block explained (what / why / how), step-by-step request flows, setup, Docker and CI.
 
 > This is a complete rebuild of a 2021 Capgemini training case study. The original code is kept in
 > [`legacy/`](legacy/) and under the git tag `legacy-v1`.
@@ -100,7 +105,9 @@ Deals-and-Coupons1.0/
 │   ├── environments/          API address
 │   ├── material-theme.scss    colours, fonts (Material 3 theme)
 │   └── styles.css             global styles
+├── docs/GUIDE.md              the beginner-friendly guide to how everything works
 ├── scripts/seed-coupons.js    fills MongoDB with ~1000 test coupons
+├── .github/workflows/ci.yml   CI pipeline: builds and tests everything on every push (GitHub Actions)
 ├── docker-compose.yml         MongoDB, or the whole system with --profile app
 ├── .env.example               template for secrets (copy to .env)
 ├── .vscode/                   recommended extensions, launch configs
@@ -268,6 +275,9 @@ cd backend\coupon-service; .\mvnw test     # repeat for each service
 - **Web layer tests** (`@WebMvcTest` + MockMvc) – status codes, JSON, validation, security rules.
 - **Database tests** (`@DataMongoTest`) – the real search queries, against a separate `deals_test` database.
 - The "context loads" tests and database tests need MongoDB running (`docker compose up -d`).
+- **CI:** GitHub Actions ([`.github/workflows/ci.yml`](.github/workflows/ci.yml)) runs all of this automatically on
+  every push to `main` and every pull request – the four services' tests (each with a throwaway MongoDB), the
+  Angular production build, and all Docker image builds. Results: the repository's **Actions** tab, or the badge above.
 
 ---
 
@@ -286,8 +296,11 @@ cd backend\coupon-service; .\mvnw test     # repeat for each service
 | 8 – Scale & redesign | Server-side search and paging (tested with 1000 coupons), batch lookups, gzip, Angular Material redesign, lazy-loaded pages. |
 | 8.1 – Fixes | Type-safe query field names, time-zone-aware `Clock` for coupon expiry, VS Code configuration cleanup. |
 | 8.2 – Members-only codes | Guests can browse every coupon, but codes are only sent to logged-in users. Guests see "Log in to see code"; after logging in or signing up they return to the page they were on. |
-| **9 – Docker** | **A Dockerfile per service and for the website (nginx), one `docker-compose.yml` for the whole system. Only the website is exposed, closing the "call a service directly" gap. Service addresses are now environment variables with `localhost` defaults, so development mode is unchanged.** |
+| 9 – Docker | A Dockerfile per service and for the website (nginx), one `docker-compose.yml` for the whole system. Only the website is exposed, closing the "call a service directly" gap. Service addresses are now environment variables with `localhost` defaults, so development mode is unchanged. |
+| **10 – CI** | **GitHub Actions pipeline: on every push it builds and tests all four services (with a throwaway MongoDB), builds the Angular app, then builds every Docker image. Fixed the `mvnw` scripts' executable flag, which would have failed on Linux. Added the beginner's [guide](docs/GUIDE.md).** |
 
 ### Next
 
-- **Continuous integration (GitHub Actions):** build and test every service automatically on each push.
+- **Continuous delivery:** publish the Docker images to a registry (e.g. GitHub Container Registry) and deploy them
+  automatically after CI passes – see [guide section 6.5](docs/GUIDE.md#65-next-step-cd-not-built-yet).
+- **Google sign-in** (planned in the original project) – see [guide section 2.6.1](docs/GUIDE.md#261-google-sign-in--not-built-how-it-would-fit).
