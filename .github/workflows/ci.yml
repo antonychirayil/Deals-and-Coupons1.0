@@ -1,0 +1,106 @@
+# Continuous Integration: GitHub runs this automatically on every push to main and on every pull request.
+# It answers one question: "does the project still build and do all tests still pass?"
+# Results: the "Actions" tab of the repository on GitHub.
+
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  # ===== Job 1: build and test each Spring Boot service =====
+  backend:
+    name: Backend (${{ matrix.service }})
+    runs-on: ubuntu-latest
+
+    # A "matrix" runs this job 4 times in parallel, once per service
+    strategy:
+      fail-fast: false # if one service fails, still finish the others so we see every problem
+      matrix:
+        service: [coupon-service, auth-service, user-service, gateway-service]
+
+    # A throwaway MongoDB for the tests that need a real database (deleted when the job ends)
+    services:
+      mongodb:
+        image: mongo:8
+        env:
+          MONGO_INITDB_ROOT_USERNAME: ci
+          MONGO_INITDB_ROOT_PASSWORD: ci-password
+        ports:
+          - 27017:27017
+        options: >-
+          --health-cmd "mongosh --quiet --eval 'db.runCommand({ping: 1})'"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 20
+
+    # The values the services normally read from .env. These are test-only values for the
+    # throwaway database above, not your real secrets (.env is never committed).
+    env:
+      MONGO_ROOT_USERNAME: ci
+      MONGO_ROOT_PASSWORD: ci-password
+      JWT_SECRET: ci-only-secret-that-is-at-least-32-characters-long
+      ADMIN_EMAIL: admin@ci.local
+      ADMIN_PASSWORD: ci-admin-password
+
+    defaults:
+      run:
+        working-directory: backend/${{ matrix.service }}
+
+    steps:
+      - name: Get the code
+        uses: actions/checkout@v7
+
+      - name: Install Java 25
+        uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: '25'
+          cache: maven # reuse downloaded libraries between runs
+          cache-dependency-path: backend/${{ matrix.service }}/pom.xml
+
+      - name: Build and run all tests
+        run: ./mvnw -B verify
+
+  # ===== Job 2: make sure the Angular app builds =====
+  frontend:
+    name: Frontend (Angular build)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend/deals-web
+
+    steps:
+      - name: Get the code
+        uses: actions/checkout@v7
+
+      - name: Install Node.js 24
+        uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: frontend/deals-web/package-lock.json
+
+      - name: Install packages
+        run: npm ci # exact versions from package-lock.json
+
+      - name: Production build
+        run: npx ng build # fails on any TypeScript or template error
+
+  # ===== Job 3: make sure every Docker image still builds =====
+  docker:
+    name: Docker images
+    runs-on: ubuntu-latest
+    needs: [backend, frontend] # only worth trying once the code itself is fine
+
+    steps:
+      - name: Get the code
+        uses: actions/checkout@v7
+
+      - name: Create a .env from the template
+        run: cp .env.example .env # docker-compose.yml expects a .env file; the example values are enough to build
+
+      - name: Build all images
+        run: docker compose --profile app build
