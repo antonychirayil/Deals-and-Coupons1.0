@@ -1,24 +1,64 @@
-<header class="navbar">
-  <nav class="container nav-inner">
-    <a routerLink="/" class="brand">🏷️ Deals &amp; Coupons</a>
+<mat-toolbar class="toolbar">
+  <div class="container inner">
+    <a routerLink="/" class="brand">
+      <mat-icon>sell</mat-icon>
+      <span>Deals<span class="amp">&amp;</span>Coupons</span>
+    </a>
 
-    <div class="links">
-      <!-- routerLink changes the page WITHOUT reloading; routerLinkActive adds a CSS class on the current page -->
-      <a routerLink="/coupons" routerLinkActive="active">Coupons</a>
-
+    <!-- Desktop links (hidden on phones by CSS) -->
+    <nav class="links desktop-only">
+      <a matButton routerLink="/coupons" routerLinkActive="active">Browse</a>
       @if (authService.isLoggedIn()) {
-        <a routerLink="/saved" routerLinkActive="active">Saved</a>
-
-        @if (authService.isAdmin()) {
-          <a routerLink="/admin" routerLinkActive="active">Admin</a>
-        }
-
-        <span class="greeting">Hi, {{ authService.currentUser()?.name }}</span>
-        <button type="button" class="logout" (click)="logout()">Log out</button>
-      } @else {
-        <a routerLink="/login" routerLinkActive="active">Log in</a>
-        <a routerLink="/register" class="btn btn-small">Sign up</a>
+        <a matButton routerLink="/saved" routerLinkActive="active">Saved</a>
       }
-    </div>
-  </nav>
-</header>
+      @if (authService.isAdmin()) {
+        <a matButton routerLink="/admin" routerLinkActive="active">Admin</a>
+      }
+    </nav>
+
+    <span class="spacer"></span>
+
+    <!-- "@if (x; as user)" = if x has a value, call it "user" inside the block -->
+    @if (authService.currentUser(); as user) {
+      <button matButton type="button" class="account" [matMenuTriggerFor]="accountMenu" aria-label="Account menu">
+        <span class="user-avatar">{{ userInitials() }}</span>
+        <span class="account-name desktop-only">{{ user.name }}</span>
+        <mat-icon iconPositionEnd>expand_more</mat-icon>
+      </button>
+
+      <!-- A Material menu: opens below the button that has [matMenuTriggerFor] -->
+      <mat-menu #accountMenu="matMenu" xPosition="before">
+        <div class="menu-header">
+          <strong>{{ user.name }}</strong>
+          <span>{{ user.email }}</span>
+        </div>
+        <mat-divider />
+        <a mat-menu-item routerLink="/saved"><mat-icon>bookmarks</mat-icon>Saved coupons</a>
+        @if (authService.isAdmin()) {
+          <a mat-menu-item routerLink="/admin"><mat-icon>dashboard</mat-icon>Admin dashboard</a>
+        }
+        <mat-divider />
+        <button mat-menu-item type="button" (click)="logout()"><mat-icon>logout</mat-icon>Log out</button>
+      </mat-menu>
+    } @else {
+      <a matButton routerLink="/login" class="desktop-only">Log in</a>
+      <a matButton="filled" routerLink="/register">Sign up</a>
+    }
+
+    <!-- Phones: the page links move into a "hamburger" menu -->
+    <button matIconButton type="button" class="mobile-only" [matMenuTriggerFor]="mobileMenu" aria-label="Open menu">
+      <mat-icon>menu</mat-icon>
+    </button>
+    <mat-menu #mobileMenu="matMenu" xPosition="before">
+      <a mat-menu-item routerLink="/coupons"><mat-icon>local_offer</mat-icon>Browse coupons</a>
+      @if (authService.isLoggedIn()) {
+        <a mat-menu-item routerLink="/saved"><mat-icon>bookmarks</mat-icon>Saved</a>
+      } @else {
+        <a mat-menu-item routerLink="/login"><mat-icon>login</mat-icon>Log in</a>
+      }
+      @if (authService.isAdmin()) {
+        <a mat-menu-item routerLink="/admin"><mat-icon>dashboard</mat-icon>Admin</a>
+      }
+    </mat-menu>
+  </div>
+</mat-toolbar>

@@ -1,16 +1,71 @@
+<!-- ===== Hero ===== -->
 <section class="hero">
   <h1>Save money on every order</h1>
-  <p>Hand-picked coupons and deals from top online stores, all in one place.</p>
-  <a routerLink="/coupons" class="btn">Browse coupons</a>
+  <p class="tagline">Hand-picked coupons from India's favourite online stores, all in one place.</p>
+
+  <form class="hero-search" role="search" (submit)="search($event, heroSearch.value)">
+    <mat-icon>search</mat-icon>
+    <input #heroSearch type="search" placeholder="Search Amazon, Swiggy, flights…" aria-label="Search coupons" />
+    <button matButton="filled" type="submit">Search</button>
+  </form>
+
+  <div class="stats">
+    @if (activeCount() !== null) {
+      <span><strong>{{ activeCount() }}</strong> active coupons</span>
+    }
+    @if (categories().length) {
+      <span><strong>{{ categories().length }}</strong> categories</span>
+    }
+    <span><strong>100%</strong> free</span>
+  </div>
 </section>
 
-<section>
-  <h2>How it works</h2>
+<!-- ===== Categories ===== -->
+@if (categories().length) {
+  <section class="section">
+    <div class="section-header">
+      <h2>Browse by category</h2>
+    </div>
+    <div class="category-grid">
+      @for (name of categories(); track name) {
+        <!-- [queryParams] builds the "?category=Food" part of the link -->
+        <a class="category-tile" routerLink="/coupons" [queryParams]="{ category: name }">
+          <mat-icon>{{ categoryIcon(name) }}</mat-icon>
+          <span>{{ name }}</span>
+        </a>
+      }
+    </div>
+  </section>
+}
+
+<!-- ===== Top deals ===== -->
+@if (topDeals().length) {
+  <section class="section">
+    <div class="section-header">
+      <h2>Top deals right now</h2>
+      <a matButton routerLink="/coupons" [queryParams]="{}">
+        View all
+        <mat-icon iconPositionEnd>arrow_forward</mat-icon>
+      </a>
+    </div>
+    <div class="coupon-grid">
+      @for (coupon of topDeals(); track coupon.id) {
+        <app-coupon-card [coupon]="coupon" [showSave]="false" />
+      }
+    </div>
+  </section>
+}
+
+<!-- ===== How it works ===== -->
+<section class="section">
+  <div class="section-header">
+    <h2>How it works</h2>
+  </div>
   <div class="steps">
-    @for (step of steps; track step.title) {
+    @for (step of steps; track step.title; let number = $index) {
       <div class="step">
-        <div class="icon">{{ step.icon }}</div>
-        <h3>{{ step.title }}</h3>
+        <div class="step-icon"><mat-icon>{{ step.icon }}</mat-icon></div>
+        <h3>{{ number + 1 }}. {{ step.title }}</h3>
         <p>{{ step.text }}</p>
       </div>
     }

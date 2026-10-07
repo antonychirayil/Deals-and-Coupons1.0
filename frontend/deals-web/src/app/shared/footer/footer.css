@@ -1,8 +1,65 @@
 .footer {
-  border-top: 1px solid var(--border);
-  background: var(--surface);
-  color: var(--text-muted);
-  font-size: 0.9rem;
-  padding: 1.25rem 0;
-  text-align: center;
+  padding-top: 40px;
+  background: var(--mat-sys-inverse-surface);
+  color: var(--mat-sys-inverse-on-surface);
+}
+
+.columns {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 32px;
+  padding-bottom: 32px;
+}
+
+.about p {
+  max-width: 380px;
+  opacity: 0.8;
+  font: var(--mat-sys-body-medium);
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font: var(--mat-sys-title-large);
+  font-weight: 700;
+  color: inherit;
+}
+
+h3 {
+  font: var(--mat-sys-title-small);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity: 0.7;
+  margin-bottom: 12px;
+}
+
+.columns a:not(.brand) {
+  display: block;
+  padding: 4px 0;
+  color: inherit;
+  opacity: 0.85;
+}
+
+.columns a:not(.brand):hover {
+  opacity: 1;
+  text-decoration: underline;
+}
+
+.bottom {
+  padding-top: 16px;
+  padding-bottom: 24px;
+  border-top: 1px solid rgb(255 255 255 / 0.15);
+  font: var(--mat-sys-body-small);
+  opacity: 0.7;
+}
+
+@media (max-width: 720px) {
+  .columns {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .about {
+    grid-column: 1 / -1; /* the "about" block takes the full width on phones */
+  }
 }

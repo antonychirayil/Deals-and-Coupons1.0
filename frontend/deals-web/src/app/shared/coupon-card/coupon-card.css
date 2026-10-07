@@ -1,108 +1,153 @@
-.card {
+:host {
+  display: block; /* custom elements are "inline" by default; block lets the card fill its grid cell */
+}
+
+.coupon {
+  height: 100%;
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
-  height: 100%;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 1.25rem;
+  gap: 12px;
+  padding: 20px;
+  border-radius: var(--card-radius);
+  transition: box-shadow 150ms ease, transform 150ms ease;
 }
 
-.card.expired {
-  opacity: 0.6;
+.coupon:hover {
+  box-shadow: var(--mat-sys-level2);
+  transform: translateY(-2px);
 }
 
-.top {
+.coupon.expired {
+  opacity: 0.65;
+}
+
+/* ----- Header: avatar | store + category | save ----- */
+
+.header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  gap: 12px;
 }
 
-.provider {
+.avatar {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  color: #fff;
   font-weight: 700;
-  font-size: 1.1rem;
+  letter-spacing: 0.02em;
 }
 
-.discount {
-  background: #dcfce7;
-  color: var(--success);
-  font-weight: 700;
-  font-size: 0.85rem;
-  padding: 0.2rem 0.6rem;
-  border-radius: 999px;
-}
-
-.description {
-  margin: 0;
-  flex: 1; /* pushes the button to the bottom so cards line up */
-}
-
-.meta {
+.store {
+  flex: 1;
+  min-width: 0; /* lets long names shrink instead of pushing the button out */
   display: flex;
-  justify-content: space-between;
-  font-size: 0.85rem;
-  color: var(--text-muted);
+  flex-direction: column;
+}
+
+.store-name {
+  font: var(--mat-sys-title-medium);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .category {
-  background: var(--bg);
-  padding: 0.1rem 0.5rem;
-  border-radius: 6px;
-}
-
-.code {
-  text-align: center;
-  font-family: ui-monospace, Consolas, monospace;
-  font-size: 1.1rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  padding: 0.55rem;
-  border: 2px dashed var(--primary);
-  border-radius: 8px;
-  color: var(--primary);
-  background: var(--primary-soft);
-}
-
-.expired-label {
-  margin: 0;
-  text-align: center;
-  color: var(--danger);
-  font-weight: 600;
-}
-
-/* Bottom row: [ Show code / code / expired ] [ ☆ ] */
-.actions {
-  display: flex;
-  gap: 0.5rem;
+  display: inline-flex;
   align-items: center;
+  gap: 4px;
+  font: var(--mat-sys-body-small);
+  color: var(--mat-sys-on-surface-variant);
 }
 
-.actions .show-code,
-.actions .code,
-.actions .expired-label {
-  flex: 1; /* take all the space the star button doesn't use */
+.category .mat-icon {
+  width: 16px;
+  height: 16px;
+  font-size: 16px;
 }
 
 .save {
-  width: 44px;
-  height: 44px;
-  flex-shrink: 0;
-  font-size: 1.3rem;
-  line-height: 1;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  background: var(--surface);
-  color: var(--text-muted);
-  cursor: pointer;
-}
-
-.save:hover {
-  border-color: #f59e0b;
+  color: var(--mat-sys-on-surface-variant);
 }
 
 .save.saved {
-  color: #f59e0b;
-  border-color: #f59e0b;
-  background: #fffbeb;
+  color: var(--mat-sys-primary);
+}
+
+/* Material Symbols can draw an icon outlined (FILL 0) or filled (FILL 1) */
+.save.saved .mat-icon {
+  font-variation-settings: 'FILL' 1;
+}
+
+/* ----- Body ----- */
+
+.discount {
+  font-size: 2.25rem;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--success);
+}
+
+.discount .unit {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-left: 2px;
+}
+
+.description {
+  flex: 1; /* pushes expiry + button to the bottom so cards in a row line up */
+  margin: 0;
+  font: var(--mat-sys-body-medium);
+  color: var(--mat-sys-on-surface);
+}
+
+.expiry {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font: var(--mat-sys-label-large);
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.expiry .mat-icon {
+  width: 18px;
+  height: 18px;
+  font-size: 18px;
+}
+
+.expiry.soon {
+  color: var(--warning);
+}
+
+.expiry.is-expired {
+  color: var(--mat-sys-error);
+}
+
+/* ----- Footer: show code / code + copy ----- */
+
+.actions > button {
+  width: 100%;
+}
+
+.code-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 4px 4px 4px 16px;
+  border: 2px dashed var(--mat-sys-primary);
+  border-radius: 12px;
+  background: var(--mat-sys-primary-container);
+}
+
+.code {
+  font-family: ui-monospace, Consolas, monospace;
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--mat-sys-on-primary-container);
+  overflow-wrap: anywhere;
 }

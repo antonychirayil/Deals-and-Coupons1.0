@@ -1,170 +1,219 @@
-/* Global styles: apply to the whole app. Component .css files only affect their own component. */
+/*
+ * Global styles. Colours come from Angular Material's theme (src/material-theme.scss),
+ * which defines CSS variables like --mat-sys-primary. Using them everywhere means
+ * changing the theme palette restyles the whole app.
+ */
 
-/* CSS variables: define colours once, reuse everywhere with var(--name) */
 :root {
-  --primary: #4f46e5;
-  --primary-dark: #4338ca;
-  --primary-soft: #eef2ff;
   --success: #15803d;
-  --danger: #b91c1c;
-  --bg: #f6f7fb;
-  --surface: #ffffff;
-  --border: #e5e7eb;
-  --text: #111827;
-  --text-muted: #6b7280;
+  --success-container: #dcfce7;
+  --warning: #b45309;
+  --warning-container: #fef3c7;
+  --card-radius: 16px;
 }
 
 * {
   box-sizing: border-box;
 }
 
-body {
-  margin: 0;
-  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  line-height: 1.5;
-}
-
 a {
-  color: var(--primary);
+  color: var(--mat-sys-primary);
   text-decoration: none;
 }
 
-h1, h2, h3 {
-  line-height: 1.2;
-  margin: 0 0 0.5rem;
+h1,
+h2,
+h3 {
+  margin: 0;
 }
 
-/* Centered content with side padding - used by navbar, pages and footer */
+/* Centered content with side padding - used by header, pages and footer */
 .container {
   width: 100%;
-  max-width: 1100px;
+  max-width: 1200px;
   margin: 0 auto;
-  padding-left: 1rem;
-  padding-right: 1rem;
+  padding-left: 16px;
+  padding-right: 16px;
 }
 
-.btn {
-  display: inline-block;
-  border: none;
-  border-radius: 8px;
-  padding: 0.6rem 1.1rem;
-  font: inherit;
-  font-weight: 600;
-  cursor: pointer;
-  background: var(--primary);
-  color: #fff;
-}
-
-.btn:hover {
-  background: var(--primary-dark);
-}
-
-.btn-outline {
-  background: transparent;
-  color: var(--primary);
-  border: 1px solid var(--primary);
-}
-
-.btn-outline:hover {
-  background: var(--primary-soft);
-}
-
-.btn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-.btn-danger {
-  background: var(--danger);
-}
-
-.btn-danger:hover {
-  background: #991b1b;
-}
-
-.btn-small {
-  padding: 0.35rem 0.75rem;
-  font-size: 0.85rem;
-}
-
-/* ===== Pages ===== */
+/* ===== Page headings ===== */
 
 .page-header {
   display: flex;
   flex-wrap: wrap;
-  gap: 1rem;
+  gap: 16px;
   justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1.5rem;
+  align-items: flex-end;
+  margin-bottom: 24px;
 }
 
-.page-narrow {
-  max-width: 440px;
-  margin: 0 auto;
+.page-title {
+  font: var(--mat-sys-headline-medium);
+  font-weight: 700;
+  color: var(--mat-sys-on-surface);
 }
 
-/* ===== Forms (login, register, coupon form) ===== */
-
-.form-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 1.5rem;
+.page-subtitle {
+  font: var(--mat-sys-body-large);
+  color: var(--mat-sys-on-surface-variant);
+  margin: 4px 0 0;
 }
 
-.field {
+/* ===== Coupon grid (browse, saved, home) ===== */
+
+.coupon-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+  gap: 16px;
+}
+
+/* ===== Empty and error states ===== */
+
+.empty-state {
+  grid-column: 1 / -1;
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
-  margin-bottom: 1rem;
-}
-
-.field label {
-  font-weight: 600;
-  font-size: 0.9rem;
-}
-
-.field input,
-.field textarea {
-  font: inherit;
-  padding: 0.6rem 0.8rem;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  background: var(--surface);
-}
-
-/* Angular adds ng-invalid / ng-touched classes to form inputs automatically */
-.field .ng-invalid.ng-touched {
-  border-color: var(--danger);
-}
-
-.field-error {
-  color: var(--danger);
-  font-size: 0.85rem;
-}
-
-.form-actions {
-  display: flex;
-  gap: 0.75rem;
   align-items: center;
-}
-
-.form-footer {
+  gap: 12px;
   text-align: center;
-  color: var(--text-muted);
-  margin-top: 1rem;
+  padding: 48px 16px;
+  color: var(--mat-sys-on-surface-variant);
 }
 
-.alert {
-  padding: 0.75rem 1rem;
-  border-radius: 8px;
-  margin-bottom: 1rem;
+.empty-state .mat-icon {
+  width: 56px;
+  height: 56px;
+  font-size: 56px;
+  color: var(--mat-sys-outline);
+}
+
+.empty-state h2 {
+  font: var(--mat-sys-title-large);
+  color: var(--mat-sys-on-surface);
 }
 
 .alert-error {
-  background: #fef2f2;
-  color: var(--danger);
-  border: 1px solid #fecaca;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  margin-bottom: 16px;
+  background: var(--mat-sys-error-container);
+  color: var(--mat-sys-on-error-container);
+}
+
+/* ===== Loading placeholders ("skeletons") that shimmer while data loads ===== */
+
+.skeleton {
+  border-radius: var(--card-radius);
+  background: linear-gradient(
+    90deg,
+    var(--mat-sys-surface-container) 25%,
+    var(--mat-sys-surface-container-high) 50%,
+    var(--mat-sys-surface-container) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.2s infinite linear;
+}
+
+@keyframes shimmer {
+  from {
+    background-position: 200% 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
+}
+
+/* Category chips on phones: one row you swipe sideways, instead of 6 rows of chips.
+   This lives in the GLOBAL stylesheet because it styles elements INSIDE a Material component,
+   which a component's own (encapsulated) CSS can't reach. */
+@media (max-width: 600px) {
+  .category-chips .mdc-evolution-chip-set__chips {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    scrollbar-width: none; /* hide the scrollbar, swiping still works */
+  }
+}
+
+/* ===== Forms ===== */
+
+.full-width {
+  width: 100%;
+}
+
+/* ===== Snackbar (toast) variants ===== */
+
+.snackbar-error {
+  --mat-snack-bar-container-color: var(--mat-sys-error);
+  --mat-snack-bar-supporting-text-color: var(--mat-sys-on-error);
+}
+
+/* ===== Login / register pages (shared by both) ===== */
+
+.auth-page {
+  display: flex;
+  justify-content: center;
+  padding: 16px 0;
+}
+
+.auth-card {
+  position: relative;
+  width: 100%;
+  max-width: 440px;
+  padding: 32px;
+  border-radius: 24px;
+  overflow: hidden;
+}
+
+.card-progress {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+
+.auth-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.auth-header h1 {
+  font: var(--mat-sys-headline-small);
+  font-weight: 700;
+}
+
+.auth-header p {
+  margin: 4px 0 0;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.auth-icon {
+  display: inline-grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  margin-bottom: 12px;
+  border-radius: 16px;
+  background: var(--mat-sys-primary-container);
+  color: var(--mat-sys-on-primary-container);
+}
+
+.submit {
+  height: 48px;
+  margin-top: 8px;
+}
+
+.auth-footer {
+  text-align: center;
+  margin: 20px 0 0;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+@media (max-width: 480px) {
+  .auth-card {
+    padding: 24px 16px;
+  }
 }

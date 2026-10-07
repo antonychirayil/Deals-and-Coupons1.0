@@ -1,54 +1,109 @@
-<h1>Browse coupons</h1>
-
-<div class="filters">
-  <!-- #search is a template reference variable: it lets us read the input's value right here -->
-  <input
-    #search
-    type="search"
-    class="search"
-    placeholder="Search by store or description…"
-    (input)="searchText.set(search.value)"
-  />
-
-  <div class="chips">
-    @for (category of categories(); track category) {
-      <button
-        type="button"
-        class="chip"
-        [class.active]="category === selectedCategory()"
-        (click)="selectedCategory.set(category)"
-      >
-        {{ category }}
-      </button>
-    }
+<div class="page-header">
+  <div>
+    <h1 class="page-title">Browse coupons</h1>
+    <p class="page-subtitle">Search across every store, or narrow it down by category.</p>
   </div>
 </div>
 
-@if (loading()) {
-  <p class="status">Loading coupons…</p>
-} @else if (errorMessage()) {
-  <div class="status error">
-    <p>{{ errorMessage() }}</p>
-    <button class="btn" type="button" (click)="loadCoupons()">Try again</button>
-  </div>
-} @else {
-  <p class="count">{{ filteredCoupons().length }} of {{ coupons().length }} coupons</p>
-
-  @if (saveError()) {
-    <div class="alert alert-error">{{ saveError() }}</div>
-  }
-
-  <div class="grid">
-    <!-- track tells Angular how to recognise each item, so it only re-draws what changed -->
-    @for (coupon of filteredCoupons(); track coupon.id) {
-      <!-- (saveToggled) listens to the card's output; $event is the coupon it sent -->
-      <app-coupon-card
-        [coupon]="coupon"
-        [saved]="savedIds().has(coupon.id)"
-        (saveToggled)="toggleSave($event)"
+<!-- ===== Filters ===== -->
+<section class="filters">
+  <div class="filter-row">
+    <mat-form-field class="search" subscriptSizing="dynamic">
+      <mat-icon matPrefix>search</mat-icon>
+      <input
+        #searchBox
+        matInput
+        type="search"
+        placeholder="Search stores or deals"
+        aria-label="Search coupons"
+        [value]="searchText()"
+        (input)="onSearchInput(searchBox.value)"
       />
-    } @empty {
-      <p class="status">No coupons match your search.</p>
+      @if (searchText()) {
+        <button matIconButton matSuffix type="button" aria-label="Clear search" (click)="clearSearch()">
+          <mat-icon>close</mat-icon>
+        </button>
+      }
+    </mat-form-field>
+
+    <mat-form-field class="sort" subscriptSizing="dynamic">
+      <mat-label>Sort by</mat-label>
+      <mat-select [value]="sort()" (selectionChange)="onSortChange($event.value)">
+        @for (option of sortOptions; track option.value) {
+          <mat-option [value]="option.value">{{ option.label }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-slide-toggle [checked]="showExpired()" (change)="onShowExpiredChange($event.checked)">
+      Show expired
+    </mat-slide-toggle>
+  </div>
+
+  <!-- Chips: pick one category (or "All") -->
+  <mat-chip-listbox
+    class="category-chips"
+    aria-label="Category"
+    [value]="category()"
+    (change)="onCategoryChange($event.value ?? null)"
+  >
+    <mat-chip-option [value]="null" [selected]="category() === null">All</mat-chip-option>
+    @for (name of categories(); track name) {
+      <mat-chip-option [value]="name">
+        <mat-icon matChipAvatar>{{ categoryIcon(name) }}</mat-icon>
+        {{ name }}
+      </mat-chip-option>
+    }
+  </mat-chip-listbox>
+</section>
+
+<!-- ===== Results ===== -->
+@if (errorMessage()) {
+  <div class="empty-state">
+    <mat-icon>cloud_off</mat-icon>
+    <h2>Something went wrong</h2>
+    <p>{{ errorMessage() }}</p>
+    <button matButton="filled" type="button" (click)="loadCoupons()">Try again</button>
+  </div>
+} @else if (loading() && !result()) {
+  <!-- First load: grey "skeleton" cards in the shape of the real ones -->
+  <div class="coupon-grid">
+    @for (placeholder of [1, 2, 3, 4, 5, 6]; track placeholder) {
+      <div class="skeleton card-skeleton"></div>
     }
   </div>
+} @else if (result(); as page) {
+  <p class="result-count">
+    @if (page.totalElements > 0) {
+      Showing {{ page.page * page.size + 1 }}–{{ page.page * page.size + page.content.length }} of
+      <strong>{{ page.totalElements }}</strong> coupons
+    }
+  </p>
+
+  <!-- While a NEW page loads we keep the old one visible but faded, so the page doesn't jump -->
+  <div class="coupon-grid" [class.refreshing]="loading()">
+    @for (coupon of page.content; track coupon.id) {
+      <app-coupon-card [coupon]="coupon" [saved]="savedIds().has(coupon.id)" (saveToggled)="toggleSave($event)" />
+    } @empty {
+      <div class="empty-state">
+        <mat-icon>search_off</mat-icon>
+        <h2>No coupons found</h2>
+        <p>Try a different search or category.</p>
+        <button matButton="outlined" type="button" (click)="resetFilters()">Clear filters</button>
+      </div>
+    }
+  </div>
+
+  @if (page.totalElements > 0) {
+    <mat-paginator
+      class="paginator"
+      [length]="page.totalElements"
+      [pageIndex]="page.page"
+      [pageSize]="page.size"
+      [pageSizeOptions]="[12, 24, 48]"
+      [showFirstLastButtons]="true"
+      aria-label="Choose page"
+      (page)="onPageChange($event)"
+    />
+  }
 }

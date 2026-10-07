@@ -1,73 +1,111 @@
-.navbar {
-  background: var(--surface);
-  border-bottom: 1px solid var(--border);
+/* Stick to the top while scrolling */
+:host {
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
 
-.nav-inner {
+/* Material components expose "tokens" (CSS variables) for customising them */
+.toolbar {
+  --mat-toolbar-container-background-color: var(--mat-sys-surface);
+  --mat-toolbar-standard-height: 64px;
+  --mat-toolbar-mobile-height: 64px;
+  border-bottom: 1px solid var(--mat-sys-outline-variant);
+  padding: 0;
+}
+
+.inner {
   display: flex;
-  flex-wrap: wrap; /* on narrow screens the links drop below the brand */
-  gap: 0.5rem 1rem;
   align-items: center;
-  justify-content: space-between;
-  min-height: 64px;
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
+  gap: 8px;
 }
 
 .brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-right: 16px;
+  font: var(--mat-sys-title-large);
   font-weight: 700;
-  font-size: 1.15rem;
-  color: var(--text);
-  white-space: nowrap; /* keep the name on one line */
+  color: var(--mat-sys-on-surface);
+  white-space: nowrap;
+}
+
+.brand .mat-icon {
+  color: var(--mat-sys-primary);
+}
+
+.amp {
+  color: var(--mat-sys-primary);
+  margin: 0 1px;
 }
 
 .links {
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.25rem;
+  gap: 4px;
 }
 
-.links a:not(.btn),
-.logout {
-  padding: 0.5rem 0.8rem;
-  border-radius: 8px;
-  color: var(--text-muted);
-  font-weight: 500;
-}
-
-.links a:not(.btn):hover,
-.logout:hover {
-  background: var(--bg);
+.links a {
+  color: var(--mat-sys-on-surface-variant);
 }
 
 .links a.active {
-  color: var(--primary);
-  background: var(--primary-soft);
+  color: var(--mat-sys-primary);
+  background: var(--mat-sys-primary-container);
 }
 
-/* A <button> that looks like the links next to it */
-.logout {
-  font: inherit;
-  border: none;
-  background: none;
-  cursor: pointer;
+.spacer {
+  flex: 1;
 }
 
-.greeting {
-  color: var(--text-muted);
-  font-size: 0.9rem;
-  padding: 0 0.5rem;
+.account {
+  color: var(--mat-sys-on-surface);
 }
 
-/* Media query: these rules only apply on screens 720px wide or less (phones, small tablets) */
+.user-avatar {
+  display: inline-grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  margin-right: 8px;
+  background: var(--mat-sys-primary);
+  color: var(--mat-sys-on-primary);
+  font: var(--mat-sys-label-large);
+}
+
+.menu-header {
+  display: flex;
+  flex-direction: column;
+  padding: 12px 16px;
+  font: var(--mat-sys-body-medium);
+}
+
+.menu-header span {
+  color: var(--mat-sys-on-surface-variant);
+}
+
+/* Show/hide parts depending on screen width */
+.mobile-only {
+  display: none;
+}
+
 @media (max-width: 720px) {
-  .greeting {
+  .desktop-only {
     display: none;
   }
 
-  .links a:not(.btn),
-  .logout {
-    padding: 0.5rem 0.6rem;
+  .mobile-only {
+    display: inline-flex;
+  }
+
+  .brand {
+    font: var(--mat-sys-title-medium);
+    font-weight: 700;
+    margin-right: 0;
+  }
+
+  .user-avatar {
+    margin-right: 0;
   }
 }

@@ -1,9 +1,20 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Service } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { environment } from '../../../environments/environment';
 import { Coupon, CouponRequest } from '../models/coupon';
+import { Page } from '../models/page';
+
+// Everything is optional: leave a value out and the backend uses its default
+export interface CouponQuery {
+  search?: string;
+  category?: string | null;
+  includeExpired?: boolean;
+  page?: number;
+  size?: number;
+  sort?: string; // "field,direction", e.g. "discount,desc"
+}
 
 /**
  * All HTTP calls about coupons live here, so components never build URLs themselves.
@@ -14,9 +25,22 @@ export class CouponService {
   private readonly http = inject(HttpClient);
   private readonly baseUrl = `${environment.apiUrl}/coupons`;
 
-  // Returns an Observable: the request is only sent when someone subscribes to it
-  getCoupons(): Observable<Coupon[]> {
-    return this.http.get<Coupon[]>(this.baseUrl);
+  // GET /api/coupons?search=..&category=..&page=0&size=12&sort=expiryDate,asc
+  searchCoupons(query: CouponQuery = {}): Observable<Page<Coupon>> {
+    // HttpParams builds the "?a=1&b=2" part. Only filled-in values are added.
+    let params = new HttpParams();
+    if (query.search?.trim()) params = params.set('search', query.search.trim());
+    if (query.category) params = params.set('category', query.category);
+    if (query.includeExpired) params = params.set('includeExpired', true);
+    if (query.page !== undefined) params = params.set('page', query.page);
+    if (query.size !== undefined) params = params.set('size', query.size);
+    if (query.sort) params = params.set('sort', query.sort);
+
+    return this.http.get<Page<Coupon>>(this.baseUrl, { params });
+  }
+
+  getCategories(): Observable<string[]> {
+    return this.http.get<string[]>(`${this.baseUrl}/categories`);
   }
 
   getCoupon(id: string): Observable<Coupon> {

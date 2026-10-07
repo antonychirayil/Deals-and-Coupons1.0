@@ -1,11 +1,53 @@
 .form-page {
-  max-width: 640px;
+  max-width: 720px;
   margin: 0 auto;
+}
+
+.back {
+  margin-bottom: 12px;
+}
+
+.form-card {
+  position: relative;
+  padding: 32px;
+  border-radius: 24px;
+  overflow: hidden;
+}
+
+.page-subtitle {
+  margin-bottom: 24px;
 }
 
 /* Two fields side by side; on narrow screens they stack */
 .row {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 0 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 0 16px;
+}
+
+.row mat-form-field {
+  width: 100%;
+}
+
+/* Space below every field, so a hint like "Saved in capitals" never touches the next field's label */
+mat-form-field {
+  margin-bottom: 12px;
+}
+
+.date-field {
+  width: 100%;
+  max-width: 280px;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+@media (max-width: 480px) {
+  .form-card {
+    padding: 24px 16px;
+  }
 }

@@ -1,53 +1,157 @@
 <div class="page-header">
-  <h1>Admin dashboard</h1>
-  <a routerLink="/admin/coupons/new" class="btn">+ New coupon</a>
+  <div>
+    <h1 class="page-title">Admin dashboard</h1>
+    <p class="page-subtitle">Create, edit and remove coupons</p>
+  </div>
+  <a matButton="filled" routerLink="/admin/coupons/new">
+    <mat-icon>add</mat-icon>
+    New coupon
+  </a>
 </div>
 
-@if (errorMessage()) {
-  <div class="alert alert-error">{{ errorMessage() }}</div>
-}
-
-@if (loading()) {
-  <p class="status">Loading…</p>
-} @else {
-  <!-- The wrapper scrolls sideways on small screens instead of squashing the table -->
-  <div class="table-wrapper">
-    <table>
-      <thead>
-        <tr>
-          <th>Code</th>
-          <th>Provider</th>
-          <th>Category</th>
-          <th>Discount</th>
-          <th>Expires</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        @for (coupon of coupons(); track coupon.id) {
-          <tr [class.expired]="coupon.expired">
-            <td class="code">{{ coupon.code }}</td>
-            <td>{{ coupon.provider }}</td>
-            <td>{{ coupon.category }}</td>
-            <td>{{ coupon.discount }}%</td>
-            <td>
-              {{ coupon.expiryDate | date: 'mediumDate' }}
-              @if (coupon.expired) {
-                <span class="badge">Expired</span>
-              }
-            </td>
-            <td class="row-actions">
-              <!-- [routerLink] with an array builds the URL /admin/coupons/<id>/edit -->
-              <a [routerLink]="['/admin/coupons', coupon.id, 'edit']" class="btn btn-outline btn-small">Edit</a>
-              <button type="button" class="btn btn-danger btn-small" (click)="deleteCoupon(coupon)">Delete</button>
-            </td>
-          </tr>
-        } @empty {
-          <tr>
-            <td colspan="6" class="status">No coupons yet. Create the first one!</td>
-          </tr>
-        }
-      </tbody>
-    </table>
+<!-- ===== Summary tiles ===== -->
+@if (stats(); as s) {
+  <div class="stats">
+    <div class="stat">
+      <mat-icon>sell</mat-icon>
+      <div><strong>{{ s.total }}</strong><span>Total coupons</span></div>
+    </div>
+    <div class="stat active">
+      <mat-icon>check_circle</mat-icon>
+      <div><strong>{{ s.active }}</strong><span>Active</span></div>
+    </div>
+    <div class="stat expired">
+      <mat-icon>event_busy</mat-icon>
+      <div><strong>{{ s.total - s.active }}</strong><span>Expired</span></div>
+    </div>
   </div>
 }
+
+<section class="table-card">
+  <div class="toolbar">
+    <mat-form-field class="search" subscriptSizing="dynamic">
+      <mat-icon matPrefix>search</mat-icon>
+      <input
+        #searchBox
+        matInput
+        type="search"
+        placeholder="Search by store, description or category"
+        aria-label="Search coupons"
+        (input)="onSearchInput(searchBox.value)"
+      />
+    </mat-form-field>
+    <span class="count">{{ totalElements() }} coupons</span>
+  </div>
+
+  @if (loading()) {
+    <mat-progress-bar mode="indeterminate" />
+  }
+
+  @if (errorMessage()) {
+    <div class="alert-error"><mat-icon>error</mat-icon>{{ errorMessage() }}</div>
+  }
+
+  <!-- The wrapper scrolls sideways on small screens instead of squashing the table -->
+  <div class="table-wrapper">
+    <!--
+      mat-table draws one row per item in [dataSource].
+      matSort + mat-sort-header make the headers clickable; we send the sort to the backend.
+    -->
+    <table
+      mat-table
+      [dataSource]="coupons()"
+      matSort
+      [matSortActive]="sort().active"
+      [matSortDirection]="sort().direction"
+      (matSortChange)="onSortChange($event)"
+    >
+      <ng-container matColumnDef="code">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Code</th>
+        <td mat-cell *matCellDef="let coupon" class="code">{{ coupon.code }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="provider">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Store</th>
+        <td mat-cell *matCellDef="let coupon">
+          <span class="store">
+            <span class="avatar" [style.background]="storeColor(coupon.provider)">{{
+              storeInitials(coupon.provider)
+            }}</span>
+            {{ coupon.provider }}
+          </span>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="category">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Category</th>
+        <td mat-cell *matCellDef="let coupon">{{ coupon.category }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="discount">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Discount</th>
+        <td mat-cell *matCellDef="let coupon">{{ coupon.discount }}%</td>
+      </ng-container>
+
+      <ng-container matColumnDef="expiryDate">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Expires</th>
+        <td mat-cell *matCellDef="let coupon">
+          {{ coupon.expiryDate | date: 'mediumDate' }}
+          @switch (status(coupon)) {
+            @case ('expired') {
+              <span class="badge expired">Expired</span>
+            }
+            @case ('soon') {
+              <span class="badge soon">Ending soon</span>
+            }
+          }
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let coupon" class="actions">
+          <a
+            matIconButton
+            [routerLink]="['/admin/coupons', coupon.id, 'edit']"
+            matTooltip="Edit"
+            [attr.aria-label]="'Edit ' + coupon.code"
+          >
+            <mat-icon>edit</mat-icon>
+          </a>
+          <button
+            matIconButton
+            type="button"
+            class="delete"
+            matTooltip="Delete"
+            [attr.aria-label]="'Delete ' + coupon.code"
+            (click)="confirmDelete(coupon)"
+          >
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="columns"></tr>
+      <tr mat-row *matRowDef="let row; columns: columns" [class.expired]="row.expired"></tr>
+
+      <!-- Shown when the search finds nothing -->
+      <tr class="no-data" *matNoDataRow>
+        <td [attr.colspan]="columns.length">
+          @if (!loading()) {
+            No coupons match "{{ searchText() }}"
+          }
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <mat-paginator
+    [length]="totalElements()"
+    [pageIndex]="pageIndex()"
+    [pageSize]="pageSize()"
+    [pageSizeOptions]="[10, 20, 50, 100]"
+    [showFirstLastButtons]="true"
+    aria-label="Choose page"
+    (page)="onPageChange($event)"
+  />
+</section>

@@ -1,66 +1,57 @@
 .filters {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
-  margin: 1rem 0 1.5rem;
+  gap: 16px;
+  margin-bottom: 20px;
+  padding: 16px;
+  border-radius: var(--card-radius);
+  background: var(--mat-sys-surface);
+  border: 1px solid var(--mat-sys-outline-variant);
+}
+
+.filter-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 16px;
 }
 
 .search {
-  width: 100%;
-  max-width: 420px;
-  padding: 0.65rem 0.9rem;
-  font: inherit;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  background: var(--surface);
+  flex: 1 1 320px; /* grow, but wrap onto its own line below 320px */
 }
 
-.search:focus {
-  outline: 2px solid var(--primary);
-  border-color: transparent;
+.sort {
+  width: 190px;
 }
 
-.chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
+.result-count {
+  margin: 0 0 12px;
+  font: var(--mat-sys-body-medium);
+  color: var(--mat-sys-on-surface-variant);
+  min-height: 20px;
 }
 
-.chip {
-  font: inherit;
-  font-size: 0.9rem;
-  padding: 0.35rem 0.9rem;
-  border-radius: 999px;
-  border: 1px solid var(--border);
-  background: var(--surface);
-  color: var(--text-muted);
-  cursor: pointer;
+.coupon-grid {
+  transition: opacity 150ms ease;
 }
 
-.chip.active {
-  background: var(--primary);
-  border-color: var(--primary);
-  color: #fff;
+.coupon-grid.refreshing {
+  opacity: 0.5;
+  pointer-events: none;
 }
 
-.count {
-  color: var(--text-muted);
-  font-size: 0.9rem;
+.card-skeleton {
+  height: 290px;
 }
 
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 1rem;
+.paginator {
+  margin-top: 24px;
+  border-radius: var(--card-radius);
+  border: 1px solid var(--mat-sys-outline-variant);
 }
 
-.status {
-  text-align: center;
-  color: var(--text-muted);
-  padding: 2rem 0;
-  grid-column: 1 / -1; /* the @empty message spans the whole grid */
-}
-
-.status.error {
-  color: var(--danger);
+@media (max-width: 600px) {
+  .sort {
+    flex: 1 1 100%;
+  }
 }

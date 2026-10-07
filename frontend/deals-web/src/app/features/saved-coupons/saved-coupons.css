@@ -1,13 +1,3 @@
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 1rem;
-  margin-top: 1rem;
-}
-
-.status {
-  text-align: center;
-  color: var(--text-muted);
-  padding: 2rem 0;
-  grid-column: 1 / -1;
+.card-skeleton {
+  height: 290px;
 }

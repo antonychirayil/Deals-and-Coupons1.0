@@ -1,3 +1,22 @@
 <footer class="footer">
-  <div class="container">© {{ year }} Deals &amp; Coupons. Save more on every order.</div>
+  <div class="container columns">
+    <div class="about">
+      <a routerLink="/" class="brand"><mat-icon>sell</mat-icon>Deals &amp; Coupons</a>
+      <p>Hand-picked coupons from India's favourite online stores. Find a deal, reveal the code, and save on every order.</p>
+    </div>
+
+    <div>
+      <h3>Explore</h3>
+      <a routerLink="/coupons">Browse coupons</a>
+      <a routerLink="/saved">Saved coupons</a>
+    </div>
+
+    <div>
+      <h3>Account</h3>
+      <a routerLink="/login">Log in</a>
+      <a routerLink="/register">Create an account</a>
+    </div>
+  </div>
+
+  <div class="container bottom">© {{ year }} Deals &amp; Coupons. Built with Spring Boot and Angular.</div>
 </footer>

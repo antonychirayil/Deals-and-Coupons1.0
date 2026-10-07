@@ -1,35 +1,61 @@
-<article class="card" [class.expired]="coupon().expired">
-  <div class="top">
-    <span class="provider">{{ coupon().provider }}</span>
-    <span class="discount">{{ coupon().discount }}% OFF</span>
+<mat-card appearance="outlined" class="coupon" [class.expired]="coupon().expired">
+  <div class="header">
+    <!-- [style.background] sets one CSS property from a TypeScript value -->
+    <div class="avatar" [style.background]="avatarColor()" aria-hidden="true">{{ initials() }}</div>
+
+    <div class="store">
+      <span class="store-name">{{ coupon().provider }}</span>
+      <span class="category"><mat-icon>{{ icon() }}</mat-icon>{{ coupon().category }}</span>
+    </div>
+
+    @if (showSave()) {
+      <button
+        matIconButton
+        type="button"
+        class="save"
+        [class.saved]="saved()"
+        [matTooltip]="saved() ? 'Remove from saved' : 'Save for later'"
+        [attr.aria-label]="saved() ? 'Remove from saved coupons' : 'Save coupon'"
+        (click)="toggleSave()"
+      >
+        <mat-icon>{{ saved() ? 'bookmark' : 'bookmark_add' }}</mat-icon>
+      </button>
+    }
   </div>
 
-  <p class="description">{{ coupon().description ?? 'Exclusive discount' }}</p>
+  <div class="discount">
+    {{ coupon().discount }}<span class="unit">% OFF</span>
+  </div>
 
-  <div class="meta">
-    <span class="category">{{ coupon().category }}</span>
-    <!-- "date" is a pipe: it formats a value for display -->
-    <span>Valid till {{ coupon().expiryDate | date: 'mediumDate' }}</span>
+  <p class="description">{{ coupon().description || 'Exclusive discount' }}</p>
+
+  <div class="expiry" [class.soon]="endingSoon()" [class.is-expired]="coupon().expired">
+    <mat-icon>schedule</mat-icon>
+    <!-- expiryLabel is our own pipe: "2027-12-31" -> "Valid till 31 Dec 2027" / "Ends in 3 days" -->
+    {{ coupon().expiryDate | expiryLabel }}
   </div>
 
   <div class="actions">
     @if (coupon().expired) {
-      <p class="expired-label">This coupon has expired</p>
+      <button matButton="tonal" type="button" disabled>Expired</button>
     } @else if (codeVisible()) {
-      <div class="code">{{ coupon().code }}</div>
+      <div class="code-box">
+        <span class="code">{{ coupon().code }}</span>
+        <button
+          matButton
+          type="button"
+          [cdkCopyToClipboard]="coupon().code"
+          (cdkCopyToClipboardCopied)="onCopied($event)"
+        >
+          <mat-icon>content_copy</mat-icon>
+          Copy
+        </button>
+      </div>
     } @else {
-      <button class="btn btn-outline show-code" type="button" (click)="showCode()">Show code</button>
+      <button matButton="filled" type="button" class="show-code" (click)="showCode()">
+        <mat-icon>visibility</mat-icon>
+        Show code
+      </button>
     }
-
-    <button
-      type="button"
-      class="save"
-      [class.saved]="saved()"
-      [attr.aria-label]="saved() ? 'Remove from saved coupons' : 'Save coupon'"
-      [title]="saved() ? 'Remove from saved' : 'Save for later'"
-      (click)="toggleSave()"
-    >
-      {{ saved() ? '★' : '☆' }}
-    </button>
   </div>
-</article>
+</mat-card>

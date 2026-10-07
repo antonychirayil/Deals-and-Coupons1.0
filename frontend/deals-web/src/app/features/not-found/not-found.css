@@ -1,9 +1,5 @@
-.not-found {
-  text-align: center;
-  padding: 4rem 1rem;
-}
-
 .not-found h1 {
-  font-size: 4rem;
-  color: var(--primary);
+  font: var(--mat-sys-display-large);
+  font-weight: 800;
+  color: var(--mat-sys-primary);
 }

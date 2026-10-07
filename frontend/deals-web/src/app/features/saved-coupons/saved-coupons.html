@@ -1,19 +1,36 @@
-<h1>My saved coupons</h1>
+<div class="page-header">
+  <div>
+    <h1 class="page-title">Saved coupons</h1>
+    <p class="page-subtitle">
+      @if (!loading() && savedCoupons().length) {
+        {{ savedCoupons().length }} saved, newest first
+      } @else {
+        Coupons you bookmark appear here
+      }
+    </p>
+  </div>
+</div>
 
 @if (errorMessage()) {
-  <div class="alert alert-error">{{ errorMessage() }}</div>
+  <div class="alert-error"><mat-icon>error</mat-icon>{{ errorMessage() }}</div>
 }
 
 @if (loading()) {
-  <p class="status">Loading…</p>
+  <div class="coupon-grid">
+    @for (placeholder of [1, 2, 3]; track placeholder) {
+      <div class="skeleton card-skeleton"></div>
+    }
+  </div>
 } @else {
-  <div class="grid">
+  <div class="coupon-grid">
     @for (item of savedCoupons(); track item.coupon.id) {
       <app-coupon-card [coupon]="item.coupon" [saved]="true" (saveToggled)="remove($event)" />
     } @empty {
-      <div class="status">
-        <p>You haven't saved any coupons yet.</p>
-        <a routerLink="/coupons" class="btn">Browse coupons</a>
+      <div class="empty-state">
+        <mat-icon>bookmarks</mat-icon>
+        <h2>No saved coupons yet</h2>
+        <p>Tap the bookmark on any coupon to keep it here for later.</p>
+        <a matButton="filled" routerLink="/coupons">Browse coupons</a>
       </div>
     }
   </div>

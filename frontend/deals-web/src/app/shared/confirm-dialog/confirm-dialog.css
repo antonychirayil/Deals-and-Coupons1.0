@@ -1,0 +1,5 @@
+/* A red "danger" version of the filled button, using Material's button tokens */
+.danger {
+  --mat-button-filled-container-color: var(--mat-sys-error);
+  --mat-button-filled-label-text-color: var(--mat-sys-on-error);
+}
