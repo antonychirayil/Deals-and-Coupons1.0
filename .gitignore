@@ -1,0 +1,25 @@
+# ---- Secrets: NEVER commit these ----
+.env
+*.env.local
+
+# ---- IDE / editor files (personal, not project) ----
+.idea/
+*.iml
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+!.vscode/launch.json
+
+# ---- Java / Maven build output ----
+target/
+*.class
+*.log
+
+# ---- Angular / Node ----
+node_modules/
+dist/
+.angular/
+
+# ---- OS junk ----
+.DS_Store
+Thumbs.db

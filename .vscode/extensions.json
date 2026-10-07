@@ -1,0 +1,14 @@
+{
+  "recommendations": [
+    "vscjava.vscode-java-pack",
+    "vmware.vscode-boot-dev-pack",
+    "angular.ng-template",
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "ms-azuretools.vscode-containers",
+    "mongodb.mongodb-vscode",
+    "humao.rest-client",
+    "eamodio.gitlens",
+    "sonarsource.sonarlint-vscode"
+  ]
+}
