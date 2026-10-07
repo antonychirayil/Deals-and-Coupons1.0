@@ -1,0 +1,88 @@
+### This service needs THREE things running:
+###   docker compose up -d          (MongoDB)
+###   coupon-service on 8081        (coupon details)
+###   auth-service on 8082          (to log in and get a token)
+
+@authUrl = http://localhost:8082/api/auth
+@couponUrl = http://localhost:8081/api/coupons
+@userUrl = http://localhost:8083/api/users/me
+
+### 0a. Register (skip if you already have an account)
+POST {{authUrl}}/register
+Content-Type: application/json
+
+{
+  "name": "Asha",
+  "email": "asha@mail.com",
+  "password": "password123"
+}
+
+### 0b. Log in to auth-service -> the token is reused below
+# @name login
+POST {{authUrl}}/login
+Content-Type: application/json
+
+{
+  "email": "asha@mail.com",
+  "password": "password123"
+}
+
+### 0c. Create a coupon in coupon-service -> its id is reused below
+# @name coupon
+POST {{couponUrl}}
+Content-Type: application/json
+
+{
+  "code": "WELCOME10",
+  "provider": "Myntra",
+  "category": "Fashion",
+  "description": "10% off your first order",
+  "discount": 10,
+  "expiryDate": "2027-12-31"
+}
+
+### 1. My profile (empty phone/city the first time)
+GET {{userUrl}}/profile
+Authorization: Bearer {{login.response.body.token}}
+
+### 2. Update my profile
+PUT {{userUrl}}/profile
+Authorization: Bearer {{login.response.body.token}}
+Content-Type: application/json
+
+{
+  "phone": "9876543210",
+  "city": "Kochi"
+}
+
+### 3. Invalid phone -> 400
+PUT {{userUrl}}/profile
+Authorization: Bearer {{login.response.body.token}}
+Content-Type: application/json
+
+{
+  "phone": "123"
+}
+
+### 4. Save the coupon from step 0c -> 201
+POST {{userUrl}}/saved-coupons/{{coupon.response.body.id}}
+Authorization: Bearer {{login.response.body.token}}
+
+### 5. Save it again -> 409
+POST {{userUrl}}/saved-coupons/{{coupon.response.body.id}}
+Authorization: Bearer {{login.response.body.token}}
+
+### 6. Save a coupon that doesn't exist -> 404
+POST {{userUrl}}/saved-coupons/does-not-exist
+Authorization: Bearer {{login.response.body.token}}
+
+### 7. My saved coupons (full details come from coupon-service)
+GET {{userUrl}}/saved-coupons
+Authorization: Bearer {{login.response.body.token}}
+
+### 8. Remove it -> 204
+DELETE {{userUrl}}/saved-coupons/{{coupon.response.body.id}}
+Authorization: Bearer {{login.response.body.token}}
+
+### 9. No token -> 401
+GET {{userUrl}}/saved-coupons
