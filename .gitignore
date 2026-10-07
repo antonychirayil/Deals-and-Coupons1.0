@@ -23,3 +23,6 @@ dist/
 # ---- OS junk ----
 .DS_Store
 Thumbs.db
+
+# ---- Local documentation (kept on this PC only, not in the online repo) ----
+docs/
