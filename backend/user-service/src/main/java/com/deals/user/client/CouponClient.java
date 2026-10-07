@@ -1,5 +1,6 @@
 package com.deals.user.client;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -35,5 +36,20 @@ public class CouponClient {
         } catch (HttpClientErrorException.NotFound e) {
             return Optional.empty();
         }
+    }
+
+    // GET http://localhost:8081/api/coupons/batch?ids=a,b,c  ->  all of them in ONE request.
+    // Ids that no longer exist are simply missing from the answer.
+    public List<CouponDto> findCoupons(List<String> couponIds) {
+        if (couponIds.isEmpty()) {
+            return List.of(); // nothing to ask for
+        }
+        CouponDto[] coupons = restClient.get()
+                .uri(uriBuilder -> uriBuilder.path("/api/coupons/batch")
+                        .queryParam("ids", String.join(",", couponIds))
+                        .build())
+                .retrieve()
+                .body(CouponDto[].class);
+        return coupons == null ? List.of() : List.of(coupons);
     }
 }

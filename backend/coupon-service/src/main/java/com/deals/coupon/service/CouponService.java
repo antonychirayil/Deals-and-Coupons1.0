@@ -4,10 +4,13 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.deals.coupon.dto.CouponFilter;
 import com.deals.coupon.dto.CouponRequest;
 import com.deals.coupon.dto.CouponResponse;
+import com.deals.coupon.dto.PageResponse;
 import com.deals.coupon.entity.Coupon;
 import com.deals.coupon.exception.CouponNotFoundException;
 import com.deals.coupon.exception.DuplicateCouponCodeException;
@@ -29,12 +32,18 @@ public class CouponService {
         this.couponRepository = couponRepository;
     }
 
-    public List<CouponResponse> getAllCoupons(String category) {
-        List<Coupon> coupons = (category == null || category.isBlank())
-                ? couponRepository.findAll()
-                : couponRepository.findByCategoryIgnoreCase(category);
+    public PageResponse<CouponResponse> searchCoupons(CouponFilter filter, Pageable pageable) {
+        // Page.map() converts every Coupon on the page into a CouponResponse, keeping the page info
+        return PageResponse.from(couponRepository.search(filter, pageable).map(CouponResponse::from));
+    }
 
-        return coupons.stream()
+    public List<String> getCategories() {
+        return couponRepository.findAllCategories();
+    }
+
+    // Used by user-service: fetch many coupons in ONE request instead of one request per coupon
+    public List<CouponResponse> getCouponsByIds(List<String> ids) {
+        return couponRepository.findAllById(ids).stream()
                 .map(CouponResponse::from)
                 .toList();
     }

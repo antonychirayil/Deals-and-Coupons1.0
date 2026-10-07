@@ -77,8 +77,8 @@ class SavedCouponServiceTest {
         when(savedCouponRepository.findByUserIdOrderBySavedAtDesc("u1")).thenReturn(List.of(
                 new SavedCoupon("u1", "c1", Instant.now()),
                 new SavedCoupon("u1", "deleted-coupon", Instant.now())));
-        when(couponClient.findCoupon("c1")).thenReturn(Optional.of(coupon));
-        when(couponClient.findCoupon("deleted-coupon")).thenReturn(Optional.empty());
+        // coupon-service only knows c1: the deleted one is missing from its answer
+        when(couponClient.findCoupons(List.of("c1", "deleted-coupon"))).thenReturn(List.of(coupon));
 
         List<SavedCouponResponse> result = savedCouponService.getSavedCoupons("u1");
 

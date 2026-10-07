@@ -13,7 +13,10 @@ spring:
 
   data:
     mongodb:
-      auto-index-creation: true # builds the @Indexed(unique = true) index on coupon codes
+      auto-index-creation: true # builds the @Indexed indexes on Coupon (unique code, category, expiryDate)
+    web:
+      pageable:
+        max-page-size: 100 # nobody can ask for ?size=100000 and download the whole database
 
 server:
   port: 8081

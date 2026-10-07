@@ -1,6 +1,7 @@
 package com.deals.coupon.controller;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -13,11 +14,15 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import com.deals.coupon.dto.CouponFilter;
 import com.deals.coupon.dto.CouponResponse;
+import com.deals.coupon.dto.PageResponse;
 import com.deals.coupon.exception.CouponNotFoundException;
 import com.deals.coupon.service.CouponService;
 
@@ -38,12 +43,30 @@ class CouponControllerTest {
             "abc", "SAVE20", "Amazon", "Electronics", "20% off", 20.0, LocalDate.of(2099, 12, 31), false);
 
     @Test
-    void getAllCoupons_returns200AndList() throws Exception {
-        when(couponService.getAllCoupons(null)).thenReturn(List.of(sampleCoupon));
+    void searchCoupons_returnsOnePageWithPagingInfo() throws Exception {
+        when(couponService.searchCoupons(any(), any()))
+                .thenReturn(new PageResponse<>(List.of(sampleCoupon), 0, 12, 1, 1));
 
-        mockMvc.perform(get("/api/coupons"))
+        mockMvc.perform(get("/api/coupons").param("search", "amazon").param("page", "0"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].code").value("SAVE20"));
+                .andExpect(jsonPath("$.content[0].code").value("SAVE20"))
+                .andExpect(jsonPath("$.totalElements").value(1))
+                .andExpect(jsonPath("$.totalPages").value(1));
+    }
+
+    @Test
+    void searchCoupons_passesFiltersAndPagingToService() throws Exception {
+        when(couponService.searchCoupons(any(), any())).thenReturn(new PageResponse<>(List.of(), 2, 5, 0, 0));
+
+        mockMvc.perform(get("/api/coupons")
+                        .param("search", "pizza").param("category", "Food").param("includeExpired", "true")
+                        .param("page", "2").param("size", "5").param("sort", "discount,desc"))
+                .andExpect(status().isOk());
+
+        // Records compare by their values, so verify() can check the exact filter and paging received
+        verify(couponService).searchCoupons(
+                new CouponFilter("pizza", "Food", true),
+                PageRequest.of(2, 5, Sort.by(Sort.Direction.DESC, "discount")));
     }
 
     @Test

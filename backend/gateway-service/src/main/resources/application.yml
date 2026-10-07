@@ -28,6 +28,8 @@ spring:
 
 server:
   port: 8080 # the ONE port the frontend talks to
+  compression:
+    enabled: true # gzip JSON responses bigger than 2 KB before sending them to the browser
 
 app:
   jwt:

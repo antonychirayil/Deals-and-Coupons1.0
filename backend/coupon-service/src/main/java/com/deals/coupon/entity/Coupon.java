@@ -20,9 +20,11 @@ public class Coupon {
     private String code;
 
     private String provider;
+    @Indexed // speeds up filtering by category
     private String category;
     private String description;
     private Double discount;
+    @Indexed // speeds up "not expired" filtering and sorting by expiry
     private LocalDate expiryDate;
 
     // Spring Data needs a no-argument constructor to rebuild objects read from MongoDB

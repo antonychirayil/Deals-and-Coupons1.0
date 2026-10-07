@@ -1,9 +1,9 @@
 package com.deals.user.service;
 
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,16 +32,18 @@ public class SavedCouponService {
     }
 
     public List<SavedCouponResponse> getSavedCoupons(String userId) {
-        List<SavedCouponResponse> result = new ArrayList<>();
+        List<SavedCoupon> savedList = savedCouponRepository.findByUserIdOrderBySavedAtDesc(userId);
 
-        for (SavedCoupon saved : savedCouponRepository.findByUserIdOrderBySavedAtDesc(userId)) {
-            // One HTTP call per saved coupon. Fine for a few coupons; Phase 8 could add a "get many" endpoint.
-            Optional<CouponDto> coupon = couponClient.findCoupon(saved.getCouponId());
+        // ONE call to coupon-service for all saved coupons (Phase 4 made one call per coupon)
+        List<String> couponIds = savedList.stream().map(SavedCoupon::getCouponId).toList();
+        Map<String, CouponDto> couponsById = couponClient.findCoupons(couponIds).stream()
+                .collect(Collectors.toMap(CouponDto::id, coupon -> coupon));
 
-            // An admin may have deleted the coupon since it was saved: just skip it
-            coupon.ifPresent(c -> result.add(new SavedCouponResponse(c, saved.getSavedAt())));
-        }
-        return result;
+        return savedList.stream()
+                // An admin may have deleted the coupon since it was saved: just skip it
+                .filter(saved -> couponsById.containsKey(saved.getCouponId()))
+                .map(saved -> new SavedCouponResponse(couponsById.get(saved.getCouponId()), saved.getSavedAt()))
+                .toList();
     }
 
     public SavedCouponResponse saveCoupon(String userId, String couponId) {

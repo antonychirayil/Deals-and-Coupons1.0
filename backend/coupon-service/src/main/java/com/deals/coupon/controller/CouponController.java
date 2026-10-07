@@ -2,6 +2,8 @@ package com.deals.coupon.controller;
 
 import java.util.List;
 
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,8 +16,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.deals.coupon.dto.CouponFilter;
 import com.deals.coupon.dto.CouponRequest;
 import com.deals.coupon.dto.CouponResponse;
+import com.deals.coupon.dto.PageResponse;
 import com.deals.coupon.service.CouponService;
 
 import jakarta.validation.Valid;
@@ -23,11 +27,13 @@ import jakarta.validation.Valid;
 /**
  * HTTP layer: maps URLs to service calls. No business logic here.
  *
- *   GET    /api/coupons              list all (optional ?category=Electronics)
- *   GET    /api/coupons/{id}         get one
- *   POST   /api/coupons              create
- *   PUT    /api/coupons/{id}         update
- *   DELETE /api/coupons/{id}         delete
+ *   GET    /api/coupons                 one page of coupons (filters + paging below)
+ *   GET    /api/coupons/categories      all category names, A-Z
+ *   GET    /api/coupons/batch?ids=a,b   several coupons by id (used by user-service)
+ *   GET    /api/coupons/{id}            get one
+ *   POST   /api/coupons                 create
+ *   PUT    /api/coupons/{id}            update
+ *   DELETE /api/coupons/{id}            delete
  */
 @RestController
 @RequestMapping("/api/coupons")
@@ -39,9 +45,29 @@ public class CouponController {
         this.couponService = couponService;
     }
 
+    /**
+     * Example: /api/coupons?search=swiggy&category=Food&page=0&size=12&sort=discount,desc
+     * Spring builds the Pageable from the page, size and sort parameters automatically.
+     * Without them: first page, 12 coupons, the ones expiring soonest first.
+     */
     @GetMapping
-    public List<CouponResponse> getAllCoupons(@RequestParam(required = false) String category) {
-        return couponService.getAllCoupons(category);
+    public PageResponse<CouponResponse> searchCoupons(
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false) String category,
+            @RequestParam(defaultValue = "false") boolean includeExpired,
+            @PageableDefault(size = 12, sort = "expiryDate") Pageable pageable) {
+        return couponService.searchCoupons(new CouponFilter(search, category, includeExpired), pageable);
+    }
+
+    @GetMapping("/categories")
+    public List<String> getCategories() {
+        return couponService.getCategories();
+    }
+
+    // "ids=a,b,c" is split on the commas into a List automatically
+    @GetMapping("/batch")
+    public List<CouponResponse> getCouponsByIds(@RequestParam List<String> ids) {
+        return couponService.getCouponsByIds(ids);
     }
 
     @GetMapping("/{id}")
