@@ -12,17 +12,17 @@ spring:
         webmvc:
           routes:
             - id: auth-service
-              uri: http://localhost:8082
+              uri: ${AUTH_SERVICE_URL:http://localhost:8082} # Docker: http://auth-service:8082
               predicates:
                 - Path=/api/auth/**
 
             - id: coupon-service
-              uri: http://localhost:8081
+              uri: ${COUPON_SERVICE_URL:http://localhost:8081}
               predicates:
                 - Path=/api/coupons, /api/coupons/**
 
             - id: user-service
-              uri: http://localhost:8083
+              uri: ${USER_SERVICE_URL:http://localhost:8083}
               predicates:
                 - Path=/api/users/**
 
@@ -35,7 +35,7 @@ app:
   jwt:
     secret: ${JWT_SECRET}
   cors:
-    allowed-origin: http://localhost:4200 # the Angular dev server (Phase 6)
+    allowed-origin: ${CORS_ALLOWED_ORIGIN:http://localhost:4200} # the Angular dev server (Phase 6)
 
 logging:
   level:

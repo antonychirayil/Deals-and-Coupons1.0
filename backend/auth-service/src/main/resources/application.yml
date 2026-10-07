@@ -7,7 +7,9 @@ spring:
     import: optional:file:../../.env[.properties],optional:file:.env[.properties]
 
   mongodb:
-    uri: mongodb://${MONGO_ROOT_USERNAME}:${MONGO_ROOT_PASSWORD}@localhost:27017/deals_db?authSource=admin
+    # ${MONGO_HOST:localhost} = use the MONGO_HOST environment variable, or "localhost" if it isn't set.
+    # Docker sets MONGO_HOST=mongodb (the container's name); from VS Code it stays localhost.
+    uri: mongodb://${MONGO_ROOT_USERNAME}:${MONGO_ROOT_PASSWORD}@${MONGO_HOST:localhost}:27017/deals_db?authSource=admin
 
   data:
     mongodb:
