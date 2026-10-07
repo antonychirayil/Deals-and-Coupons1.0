@@ -17,9 +17,10 @@ public record CouponResponse(
         LocalDate expiryDate,
         boolean expired) {
 
-    // Converts the database entity into the API shape
-    public static CouponResponse from(Coupon coupon) {
-        boolean expired = coupon.getExpiryDate().isBefore(LocalDate.now());
+    // Converts the database entity into the API shape.
+    // "today" is passed in (from the service's Clock) instead of calling LocalDate.now() here.
+    public static CouponResponse from(Coupon coupon, LocalDate today) {
+        boolean expired = coupon.getExpiryDate().isBefore(today);
         return new CouponResponse(
                 coupon.getId(),
                 coupon.getCode(),

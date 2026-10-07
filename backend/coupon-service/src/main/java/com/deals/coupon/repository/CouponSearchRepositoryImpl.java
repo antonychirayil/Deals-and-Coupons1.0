@@ -1,5 +1,6 @@
 package com.deals.coupon.repository;
 
+import java.time.Clock;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -23,30 +24,36 @@ import com.deals.coupon.entity.Coupon;
 public class CouponSearchRepositoryImpl implements CouponSearchRepository {
 
     private final MongoTemplate mongoTemplate;
+    private final Clock clock;
 
-    public CouponSearchRepositoryImpl(MongoTemplate mongoTemplate) {
+    public CouponSearchRepositoryImpl(MongoTemplate mongoTemplate, Clock clock) {
         this.mongoTemplate = mongoTemplate;
+        this.clock = clock;
     }
 
     @Override
     public Page<Coupon> search(CouponFilter filter, Pageable pageable) {
         Query query = new Query();
 
+        // Field names are written as method references (Coupon::getProvider) instead of strings ("provider").
+        // If a field is ever renamed, the compiler now catches every query that uses it - a typo in a
+        // string would only fail at runtime, by silently matching nothing.
+
         if (hasText(filter.search())) {
             // Pattern.quote: treat the user's text literally, so "c++" or "Rs." can't break the regex
             Pattern text = Pattern.compile(Pattern.quote(filter.search().trim()), Pattern.CASE_INSENSITIVE);
             query.addCriteria(new Criteria().orOperator(
-                    Criteria.where("provider").regex(text),
-                    Criteria.where("description").regex(text),
-                    Criteria.where("category").regex(text)));
+                    Criteria.where(Coupon::getProvider).regex(text),
+                    Criteria.where(Coupon::getDescription).regex(text),
+                    Criteria.where(Coupon::getCategory).regex(text)));
         }
 
         if (hasText(filter.category())) {
-            query.addCriteria(Criteria.where("category").is(filter.category()));
+            query.addCriteria(Criteria.where(Coupon::getCategory).is(filter.category()));
         }
 
         if (!filter.includeExpired()) {
-            query.addCriteria(Criteria.where("expiryDate").gte(LocalDate.now()));
+            query.addCriteria(Criteria.where(Coupon::getExpiryDate).gte(LocalDate.now(clock)));
         }
 
         // 1) How many match in total? (needed for "page 3 of 76")
@@ -55,7 +62,7 @@ public class CouponSearchRepositoryImpl implements CouponSearchRepository {
         // 2) Fetch only this page. Adding "id" as a last sort key makes the order stable:
         //    many coupons share an expiry date, and without a tie-breaker they could jump between pages.
         Pageable stablePageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
-                pageable.getSort().and(Sort.by("id")));
+                pageable.getSort().and(Sort.by(Coupon::getId)));
         List<Coupon> coupons = mongoTemplate.find(query.with(stablePageable), Coupon.class);
 
         return new PageImpl<>(coupons, pageable, total);

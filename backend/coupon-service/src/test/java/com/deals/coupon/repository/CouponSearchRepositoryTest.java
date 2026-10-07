@@ -2,6 +2,7 @@ package com.deals.coupon.repository;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.time.Clock;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -9,12 +10,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.mongodb.test.autoconfigure.DataMongoTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.test.context.TestPropertySource;
 
+import com.deals.coupon.config.TimeConfig;
 import com.deals.coupon.dto.CouponFilter;
 import com.deals.coupon.entity.Coupon;
 
@@ -24,6 +27,7 @@ import com.deals.coupon.entity.Coupon;
  * Needs Docker's MongoDB running. Uses a separate "deals_test" database, never your real data.
  */
 @DataMongoTest
+@Import(TimeConfig.class) // the test slice only starts MongoDB beans, so we add our Clock explicitly
 @TestPropertySource(properties =
         "spring.mongodb.uri=mongodb://${MONGO_ROOT_USERNAME}:${MONGO_ROOT_PASSWORD}@localhost:27017/deals_test?authSource=admin")
 class CouponSearchRepositoryTest {
@@ -34,10 +38,15 @@ class CouponSearchRepositoryTest {
     @Autowired
     private MongoTemplate mongoTemplate;
 
-    private final LocalDate today = LocalDate.now();
+    @Autowired
+    private Clock clock;
+
+    private LocalDate today;
 
     @BeforeEach
     void setUp() {
+        today = LocalDate.now(clock); // the same "today" the search code uses
+
         // Safety check BEFORE deleting anything: we must be on the test database
         assertEquals("deals_test", mongoTemplate.getDb().getName());
         couponRepository.deleteAll();

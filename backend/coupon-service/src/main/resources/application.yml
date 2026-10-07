@@ -21,6 +21,9 @@ spring:
 server:
   port: 8081
 
+app:
+  time-zone: Asia/Kolkata # coupons expire at midnight India time (see config/TimeConfig.java)
+
 logging:
   level:
     com.deals: DEBUG # our code: show everything

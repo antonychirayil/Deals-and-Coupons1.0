@@ -1,5 +1,7 @@
 package com.deals.coupon.service;
 
+import java.time.Clock;
+import java.time.LocalDate;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -26,15 +28,17 @@ public class CouponService {
     private static final Logger log = LoggerFactory.getLogger(CouponService.class);
 
     private final CouponRepository couponRepository;
+    private final Clock clock;
 
-    // Constructor injection: Spring passes in the repository when it creates this service
-    public CouponService(CouponRepository couponRepository) {
+    // Constructor injection: Spring passes in the repository and the clock when it creates this service
+    public CouponService(CouponRepository couponRepository, Clock clock) {
         this.couponRepository = couponRepository;
+        this.clock = clock;
     }
 
     public PageResponse<CouponResponse> searchCoupons(CouponFilter filter, Pageable pageable) {
         // Page.map() converts every Coupon on the page into a CouponResponse, keeping the page info
-        return PageResponse.from(couponRepository.search(filter, pageable).map(CouponResponse::from));
+        return PageResponse.from(couponRepository.search(filter, pageable).map(this::toResponse));
     }
 
     public List<String> getCategories() {
@@ -44,12 +48,12 @@ public class CouponService {
     // Used by user-service: fetch many coupons in ONE request instead of one request per coupon
     public List<CouponResponse> getCouponsByIds(List<String> ids) {
         return couponRepository.findAllById(ids).stream()
-                .map(CouponResponse::from)
+                .map(this::toResponse)
                 .toList();
     }
 
     public CouponResponse getCouponById(String id) {
-        return CouponResponse.from(findCouponOrThrow(id));
+        return toResponse(findCouponOrThrow(id));
     }
 
     public CouponResponse createCoupon(CouponRequest request) {
@@ -63,7 +67,7 @@ public class CouponService {
         Coupon saved = couponRepository.save(coupon);
 
         log.info("Created coupon {} with id {}", saved.getCode(), saved.getId());
-        return CouponResponse.from(saved);
+        return toResponse(saved);
     }
 
     public CouponResponse updateCoupon(String id, CouponRequest request) {
@@ -83,7 +87,7 @@ public class CouponService {
         coupon.setExpiryDate(request.expiryDate());
 
         log.info("Updated coupon {}", id);
-        return CouponResponse.from(couponRepository.save(coupon));
+        return toResponse(couponRepository.save(coupon));
     }
 
     public void deleteCoupon(String id) {
@@ -92,6 +96,10 @@ public class CouponService {
         }
         couponRepository.deleteById(id);
         log.info("Deleted coupon {}", id);
+    }
+
+    private CouponResponse toResponse(Coupon coupon) {
+        return CouponResponse.from(coupon, LocalDate.now(clock));
     }
 
     private Coupon findCouponOrThrow(String id) {
