@@ -1,0 +1,20 @@
+<h1>My saved coupons</h1>
+
+@if (errorMessage()) {
+  <div class="alert alert-error">{{ errorMessage() }}</div>
+}
+
+@if (loading()) {
+  <p class="status">Loading…</p>
+} @else {
+  <div class="grid">
+    @for (item of savedCoupons(); track item.coupon.id) {
+      <app-coupon-card [coupon]="item.coupon" [saved]="true" (saveToggled)="remove($event)" />
+    } @empty {
+      <div class="status">
+        <p>You haven't saved any coupons yet.</p>
+        <a routerLink="/coupons" class="btn">Browse coupons</a>
+      </div>
+    }
+  </div>
+}

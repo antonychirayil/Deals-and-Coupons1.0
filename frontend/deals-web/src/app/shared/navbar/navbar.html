@@ -4,8 +4,21 @@
 
     <div class="links">
       <!-- routerLink changes the page WITHOUT reloading; routerLinkActive adds a CSS class on the current page -->
-      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Home</a>
       <a routerLink="/coupons" routerLinkActive="active">Coupons</a>
+
+      @if (authService.isLoggedIn()) {
+        <a routerLink="/saved" routerLinkActive="active">Saved</a>
+
+        @if (authService.isAdmin()) {
+          <a routerLink="/admin" routerLinkActive="active">Admin</a>
+        }
+
+        <span class="greeting">Hi, {{ authService.currentUser()?.name }}</span>
+        <button type="button" class="logout" (click)="logout()">Log out</button>
+      } @else {
+        <a routerLink="/login" routerLinkActive="active">Log in</a>
+        <a routerLink="/register" class="btn btn-small">Sign up</a>
+      }
     </div>
   </nav>
 </header>

@@ -1,0 +1,68 @@
+<section class="form-page">
+  <h1>{{ isEdit() ? 'Edit coupon' : 'New coupon' }}</h1>
+
+  <form class="form-card" [formGroup]="form" (ngSubmit)="submit()">
+    @if (errorMessage()) {
+      <div class="alert alert-error">{{ errorMessage() }}</div>
+    }
+
+    <div class="row">
+      <div class="field">
+        <label for="code">Code</label>
+        <input id="code" type="text" formControlName="code" placeholder="SAVE20" />
+        @if (form.controls.code.touched && form.controls.code.invalid) {
+          <span class="field-error">Code must be 3 to 20 characters</span>
+        }
+      </div>
+
+      <div class="field">
+        <label for="discount">Discount (%)</label>
+        <input id="discount" type="number" formControlName="discount" min="0" max="100" />
+        @if (form.controls.discount.touched && form.controls.discount.invalid) {
+          <span class="field-error">Enter a number from 0 to 100</span>
+        }
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="field">
+        <label for="provider">Provider</label>
+        <input id="provider" type="text" formControlName="provider" placeholder="Amazon" />
+        @if (form.controls.provider.touched && form.controls.provider.invalid) {
+          <span class="field-error">Provider is required</span>
+        }
+      </div>
+
+      <div class="field">
+        <label for="category">Category</label>
+        <input id="category" type="text" formControlName="category" placeholder="Electronics" />
+        @if (form.controls.category.touched && form.controls.category.invalid) {
+          <span class="field-error">Category is required</span>
+        }
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="description">Description</label>
+      <textarea id="description" rows="3" formControlName="description"></textarea>
+      @if (form.controls.description.touched && form.controls.description.invalid) {
+        <span class="field-error">At most 500 characters</span>
+      }
+    </div>
+
+    <div class="field">
+      <label for="expiryDate">Expiry date</label>
+      <input id="expiryDate" type="date" formControlName="expiryDate" />
+      @if (form.controls.expiryDate.touched && form.controls.expiryDate.invalid) {
+        <span class="field-error">Expiry date is required</span>
+      }
+    </div>
+
+    <div class="form-actions">
+      <button class="btn" type="submit" [disabled]="submitting()">
+        {{ submitting() ? 'Saving…' : isEdit() ? 'Save changes' : 'Create coupon' }}
+      </button>
+      <a routerLink="/admin">Cancel</a>
+    </div>
+  </form>
+</section>

@@ -12,11 +12,24 @@
     <span>Valid till {{ coupon().expiryDate | date: 'mediumDate' }}</span>
   </div>
 
-  @if (coupon().expired) {
-    <p class="expired-label">This coupon has expired</p>
-  } @else if (codeVisible()) {
-    <div class="code">{{ coupon().code }}</div>
-  } @else {
-    <button class="btn btn-outline" type="button" (click)="showCode()">Show code</button>
-  }
+  <div class="actions">
+    @if (coupon().expired) {
+      <p class="expired-label">This coupon has expired</p>
+    } @else if (codeVisible()) {
+      <div class="code">{{ coupon().code }}</div>
+    } @else {
+      <button class="btn btn-outline show-code" type="button" (click)="showCode()">Show code</button>
+    }
+
+    <button
+      type="button"
+      class="save"
+      [class.saved]="saved()"
+      [attr.aria-label]="saved() ? 'Remove from saved coupons' : 'Save coupon'"
+      [title]="saved() ? 'Remove from saved' : 'Save for later'"
+      (click)="toggleSave()"
+    >
+      {{ saved() ? '★' : '☆' }}
+    </button>
+  </div>
 </article>

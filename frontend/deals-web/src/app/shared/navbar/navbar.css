@@ -5,9 +5,13 @@
 
 .nav-inner {
   display: flex;
+  flex-wrap: wrap; /* on narrow screens the links drop below the brand */
+  gap: 0.5rem 1rem;
   align-items: center;
   justify-content: space-between;
-  height: 64px;
+  min-height: 64px;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
 }
 
 .brand {
@@ -19,17 +23,21 @@
 
 .links {
   display: flex;
+  flex-wrap: wrap;
+  align-items: center;
   gap: 0.25rem;
 }
 
-.links a {
-  padding: 0.5rem 0.9rem;
+.links a:not(.btn),
+.logout {
+  padding: 0.5rem 0.8rem;
   border-radius: 8px;
   color: var(--text-muted);
   font-weight: 500;
 }
 
-.links a:hover {
+.links a:not(.btn):hover,
+.logout:hover {
   background: var(--bg);
 }
 
@@ -38,13 +46,28 @@
   background: var(--primary-soft);
 }
 
-/* Media query: these rules only apply on screens 480px wide or less (phones) */
-@media (max-width: 480px) {
-  .brand {
-    font-size: 1rem;
+/* A <button> that looks like the links next to it */
+.logout {
+  font: inherit;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.greeting {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  padding: 0 0.5rem;
+}
+
+/* Media query: these rules only apply on screens 720px wide or less (phones, small tablets) */
+@media (max-width: 720px) {
+  .greeting {
+    display: none;
   }
 
-  .links a {
+  .links a:not(.btn),
+  .logout {
     padding: 0.5rem 0.6rem;
   }
 }

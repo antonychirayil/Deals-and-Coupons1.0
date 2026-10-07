@@ -70,3 +70,39 @@
   color: var(--danger);
   font-weight: 600;
 }
+
+/* Bottom row: [ Show code / code / expired ] [ ☆ ] */
+.actions {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.actions .show-code,
+.actions .code,
+.actions .expired-label {
+  flex: 1; /* take all the space the star button doesn't use */
+}
+
+.save {
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  font-size: 1.3rem;
+  line-height: 1;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.save:hover {
+  border-color: #f59e0b;
+}
+
+.save.saved {
+  color: #f59e0b;
+  border-color: #f59e0b;
+  background: #fffbeb;
+}

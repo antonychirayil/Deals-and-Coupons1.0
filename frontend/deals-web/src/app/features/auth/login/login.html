@@ -1,0 +1,35 @@
+<section class="page-narrow">
+  <h1>Log in</h1>
+
+  <!-- [formGroup] connects this <form> to the "form" object in login.ts -->
+  <form class="form-card" [formGroup]="form" (ngSubmit)="submit()">
+    @if (errorMessage()) {
+      <div class="alert alert-error">{{ errorMessage() }}</div>
+    }
+
+    <div class="field">
+      <label for="email">Email</label>
+      <!-- formControlName links this input to form.controls.email -->
+      <input id="email" type="email" formControlName="email" autocomplete="email" />
+      @if (form.controls.email.touched && form.controls.email.hasError('required')) {
+        <span class="field-error">Email is required</span>
+      } @else if (form.controls.email.touched && form.controls.email.hasError('email')) {
+        <span class="field-error">Enter a valid email address</span>
+      }
+    </div>
+
+    <div class="field">
+      <label for="password">Password</label>
+      <input id="password" type="password" formControlName="password" autocomplete="current-password" />
+      @if (form.controls.password.touched && form.controls.password.hasError('required')) {
+        <span class="field-error">Password is required</span>
+      }
+    </div>
+
+    <button class="btn" type="submit" [disabled]="submitting()">
+      {{ submitting() ? 'Logging in…' : 'Log in' }}
+    </button>
+  </form>
+
+  <p class="form-footer">New here? <a routerLink="/register">Create an account</a></p>
+</section>

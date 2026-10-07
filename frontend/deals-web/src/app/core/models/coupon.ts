@@ -10,3 +10,13 @@ export interface Coupon {
   expiryDate: string; // "2027-12-31"
   expired: boolean;
 }
+
+// What we send to create or update a coupon (matches CouponRequest in coupon-service)
+export interface CouponRequest {
+  code: string;
+  provider: string;
+  category: string;
+  description: string;
+  discount: number;
+  expiryDate: string;
+}

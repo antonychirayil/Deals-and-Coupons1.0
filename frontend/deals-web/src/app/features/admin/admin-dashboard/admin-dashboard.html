@@ -1,0 +1,53 @@
+<div class="page-header">
+  <h1>Admin dashboard</h1>
+  <a routerLink="/admin/coupons/new" class="btn">+ New coupon</a>
+</div>
+
+@if (errorMessage()) {
+  <div class="alert alert-error">{{ errorMessage() }}</div>
+}
+
+@if (loading()) {
+  <p class="status">Loading…</p>
+} @else {
+  <!-- The wrapper scrolls sideways on small screens instead of squashing the table -->
+  <div class="table-wrapper">
+    <table>
+      <thead>
+        <tr>
+          <th>Code</th>
+          <th>Provider</th>
+          <th>Category</th>
+          <th>Discount</th>
+          <th>Expires</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (coupon of coupons(); track coupon.id) {
+          <tr [class.expired]="coupon.expired">
+            <td class="code">{{ coupon.code }}</td>
+            <td>{{ coupon.provider }}</td>
+            <td>{{ coupon.category }}</td>
+            <td>{{ coupon.discount }}%</td>
+            <td>
+              {{ coupon.expiryDate | date: 'mediumDate' }}
+              @if (coupon.expired) {
+                <span class="badge">Expired</span>
+              }
+            </td>
+            <td class="row-actions">
+              <!-- [routerLink] with an array builds the URL /admin/coupons/<id>/edit -->
+              <a [routerLink]="['/admin/coupons', coupon.id, 'edit']" class="btn btn-outline btn-small">Edit</a>
+              <button type="button" class="btn btn-danger btn-small" (click)="deleteCoupon(coupon)">Delete</button>
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="6" class="status">No coupons yet. Create the first one!</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+}

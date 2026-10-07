@@ -34,10 +34,19 @@
 } @else {
   <p class="count">{{ filteredCoupons().length }} of {{ coupons().length }} coupons</p>
 
+  @if (saveError()) {
+    <div class="alert alert-error">{{ saveError() }}</div>
+  }
+
   <div class="grid">
     <!-- track tells Angular how to recognise each item, so it only re-draws what changed -->
     @for (coupon of filteredCoupons(); track coupon.id) {
-      <app-coupon-card [coupon]="coupon" />
+      <!-- (saveToggled) listens to the card's output; $event is the coupon it sent -->
+      <app-coupon-card
+        [coupon]="coupon"
+        [saved]="savedIds().has(coupon.id)"
+        (saveToggled)="toggleSave($event)"
+      />
     } @empty {
       <p class="status">No coupons match your search.</p>
     }

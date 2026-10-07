@@ -1,0 +1,62 @@
+.table-wrapper {
+  overflow-x: auto;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+th,
+td {
+  text-align: left;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+th {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+  background: var(--bg);
+}
+
+tbody tr:last-child td {
+  border-bottom: none;
+}
+
+tr.expired {
+  color: var(--text-muted);
+}
+
+.code {
+  font-family: ui-monospace, Consolas, monospace;
+  font-weight: 700;
+}
+
+.badge {
+  margin-left: 0.4rem;
+  font-size: 0.75rem;
+  color: var(--danger);
+  background: #fef2f2;
+  padding: 0.1rem 0.45rem;
+  border-radius: 999px;
+}
+
+.row-actions {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+}
+
+.status {
+  text-align: center;
+  color: var(--text-muted);
+  padding: 2rem 0;
+}
