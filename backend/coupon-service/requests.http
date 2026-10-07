@@ -1,0 +1,69 @@
+### Variables
+@baseUrl = http://localhost:8081/api/coupons
+
+### 1. Health check (is the app up and connected to MongoDB?)
+GET http://localhost:8081/actuator/health
+
+### 2. Create a coupon -> 201 Created
+POST {{baseUrl}}
+Content-Type: application/json
+
+{
+  "code": "save20",
+  "provider": "Amazon",
+  "category": "Electronics",
+  "description": "20% off on orders over Rs. 2000",
+  "discount": 20,
+  "expiryDate": "2027-12-31"
+}
+
+### 3. Create the same code again -> 409 Conflict
+POST {{baseUrl}}
+Content-Type: application/json
+
+{
+  "code": "SAVE20",
+  "provider": "Flipkart",
+  "category": "Fashion",
+  "discount": 10,
+  "expiryDate": "2027-06-30"
+}
+
+### 4. Invalid body -> 400 Bad Request with a list of field errors
+POST {{baseUrl}}
+Content-Type: application/json
+
+{
+  "code": "x",
+  "provider": "",
+  "discount": 150,
+  "expiryDate": "2020-01-01"
+}
+
+### 5. List all coupons
+GET {{baseUrl}}
+
+### 6. Filter by category (case doesn't matter)
+GET {{baseUrl}}?category=electronics
+
+### 7. Get one coupon (paste an id from step 2 or 5)
+GET {{baseUrl}}/PASTE_ID_HERE
+
+### 8. Update a coupon
+PUT {{baseUrl}}/PASTE_ID_HERE
+Content-Type: application/json
+
+{
+  "code": "SAVE25",
+  "provider": "Amazon",
+  "category": "Electronics",
+  "description": "Now 25% off!",
+  "discount": 25,
+  "expiryDate": "2027-12-31"
+}
+
+### 9. Delete a coupon -> 204 No Content
+DELETE {{baseUrl}}/PASTE_ID_HERE
+
+### 10. Get an id that doesn't exist -> 404 Not Found
+GET {{baseUrl}}/does-not-exist

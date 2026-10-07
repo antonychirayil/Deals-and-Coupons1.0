@@ -1,0 +1,33 @@
+spring:
+  application:
+    name: coupon-service
+
+  # Load MONGO_ROOT_USERNAME / MONGO_ROOT_PASSWORD from the repo's .env file.
+  # Two paths because the working directory differs between "mvnw" (service folder)
+  # and VS Code (repo root). "optional:" means: don't crash if the file is missing.
+  config:
+    import: optional:file:../../.env[.properties],optional:file:.env[.properties]
+
+  mongodb:
+    uri: mongodb://${MONGO_ROOT_USERNAME}:${MONGO_ROOT_PASSWORD}@localhost:27017/deals_db?authSource=admin
+
+  data:
+    mongodb:
+      auto-index-creation: true # builds the @Indexed(unique = true) index on coupon codes
+
+server:
+  port: 8081
+
+logging:
+  level:
+    com.deals: DEBUG # our code: show everything
+                     # Spring itself stays at the default INFO
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health # http://localhost:8081/actuator/health
+  endpoint:
+    health:
+      show-details: always # also show whether MongoDB is reachable
