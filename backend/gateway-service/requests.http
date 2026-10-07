@@ -1,0 +1,64 @@
+### Everything goes through the gateway on port 8080.
+### Needs all 4 services running + MongoDB (docker compose up -d).
+
+@gateway = http://localhost:8080
+
+### 1. Browse coupons - public, no token -> 200
+GET {{gateway}}/api/coupons
+
+### 2. Log in as a normal user (register first via auth-service/requests.http if needed)
+# @name user
+POST {{gateway}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "asha@mail.com",
+  "password": "password123"
+}
+
+### 3. Log in as admin (password is ADMIN_PASSWORD in your .env file)
+# @name admin
+POST {{gateway}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@deals.local",
+  "password": "PASTE_ADMIN_PASSWORD_FROM_.env"
+}
+
+### 4. Create a coupon with NO token -> 401 (who are you?)
+POST {{gateway}}/api/coupons
+Content-Type: application/json
+
+{ "code": "GATE10", "provider": "Ajio", "category": "Fashion", "discount": 10, "expiryDate": "2027-12-31" }
+
+### 5. Create a coupon as a USER -> 403 (I know you, but you're not allowed)
+POST {{gateway}}/api/coupons
+Authorization: Bearer {{user.response.body.token}}
+Content-Type: application/json
+
+{ "code": "GATE10", "provider": "Ajio", "category": "Fashion", "discount": 10, "expiryDate": "2027-12-31" }
+
+### 6. Create a coupon as ADMIN -> 201
+# @name coupon
+POST {{gateway}}/api/coupons
+Authorization: Bearer {{admin.response.body.token}}
+Content-Type: application/json
+
+{ "code": "GATE10", "provider": "Ajio", "category": "Fashion", "discount": 10, "expiryDate": "2027-12-31" }
+
+### 7. User saves that coupon (gateway -> user-service -> coupon-service) -> 201
+POST {{gateway}}/api/users/me/saved-coupons/{{coupon.response.body.id}}
+Authorization: Bearer {{user.response.body.token}}
+
+### 8. User's saved coupons -> 200
+GET {{gateway}}/api/users/me/saved-coupons
+Authorization: Bearer {{user.response.body.token}}
+
+### 9. Who am I? (routed to auth-service) -> 200
+GET {{gateway}}/api/auth/me
+Authorization: Bearer {{user.response.body.token}}
+
+### 10. Admin deletes the coupon -> 204
+DELETE {{gateway}}/api/coupons/{{coupon.response.body.id}}
+Authorization: Bearer {{admin.response.body.token}}

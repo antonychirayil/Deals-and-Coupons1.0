@@ -1,0 +1,46 @@
+spring:
+  application:
+    name: gateway-service
+
+  config:
+    import: optional:file:../../.env[.properties],optional:file:.env[.properties]
+
+  # ===== Routing table: "if the path matches X, forward the request to service Y" =====
+  cloud:
+    gateway:
+      server:
+        webmvc:
+          routes:
+            - id: auth-service
+              uri: http://localhost:8082
+              predicates:
+                - Path=/api/auth/**
+
+            - id: coupon-service
+              uri: http://localhost:8081
+              predicates:
+                - Path=/api/coupons, /api/coupons/**
+
+            - id: user-service
+              uri: http://localhost:8083
+              predicates:
+                - Path=/api/users/**
+
+server:
+  port: 8080 # the ONE port the frontend talks to
+
+app:
+  jwt:
+    secret: ${JWT_SECRET}
+  cors:
+    allowed-origin: http://localhost:4200 # the Angular dev server (Phase 6)
+
+logging:
+  level:
+    com.deals: DEBUG
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
