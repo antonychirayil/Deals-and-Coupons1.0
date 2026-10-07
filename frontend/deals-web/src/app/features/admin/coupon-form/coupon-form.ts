@@ -83,7 +83,7 @@ export class CouponForm implements OnInit {
         // setValue() fills every field of the form at once
         next: (coupon) => {
           this.form.setValue({
-            code: coupon.code,
+            code: coupon.code ?? '', // admins always receive the code; ?? '' just satisfies TypeScript
             provider: coupon.provider,
             category: coupon.category,
             description: coupon.description ?? '',

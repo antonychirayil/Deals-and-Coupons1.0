@@ -38,13 +38,19 @@
   <div class="actions">
     @if (coupon().expired) {
       <button matButton="tonal" type="button" disabled>Expired</button>
+    } @else if (needsLogin()) {
+      <!-- Guest: the code isn't in the data at all, so there is nothing to show yet -->
+      <button matButton="outlined" type="button" class="login-to-see" (click)="logInToSeeCode()">
+        <mat-icon>lock</mat-icon>
+        Log in to see code
+      </button>
     } @else if (codeVisible()) {
       <div class="code-box">
         <span class="code">{{ coupon().code }}</span>
         <button
           matButton
           type="button"
-          [cdkCopyToClipboard]="coupon().code"
+          [cdkCopyToClipboard]="coupon().code ?? ''"
           (cdkCopyToClipboardCopied)="onCopied($event)"
         >
           <mat-icon>content_copy</mat-icon>

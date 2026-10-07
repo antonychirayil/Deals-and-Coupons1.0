@@ -5,6 +5,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { Router } from '@angular/router';
 
 import { Coupon } from '../../core/models/coupon';
 import { ExpiryLabelPipe } from '../pipes/expiry-label-pipe';
@@ -22,6 +23,7 @@ import { categoryIcon, daysUntil, storeColor, storeInitials } from '../utils/dis
 })
 export class CouponCard {
   private readonly snackBar = inject(MatSnackBar);
+  private readonly router = inject(Router);
 
   // input.required = the parent MUST give us a coupon. Read it like a function: coupon()
   readonly coupon = input.required<Coupon>();
@@ -34,6 +36,9 @@ export class CouponCard {
 
   protected readonly codeVisible = signal(false);
 
+  // The backend leaves the code out (null) when nobody is logged in
+  protected readonly needsLogin = computed(() => this.coupon().code === null);
+
   // Values derived from the coupon. computed() recalculates only when coupon() changes.
   protected readonly initials = computed(() => storeInitials(this.coupon().provider));
   protected readonly avatarColor = computed(() => storeColor(this.coupon().provider));
@@ -45,6 +50,11 @@ export class CouponCard {
 
   protected showCode(): void {
     this.codeVisible.set(true);
+  }
+
+  // Send the guest to log in, then bring them back to the page they were on
+  protected logInToSeeCode(): void {
+    this.router.navigate(['/login'], { queryParams: { returnUrl: this.router.url } });
   }
 
   protected toggleSave(): void {

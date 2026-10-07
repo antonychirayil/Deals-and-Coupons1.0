@@ -25,7 +25,7 @@ export class Home implements OnInit {
 
   protected readonly steps = [
     { icon: 'travel_explore', title: 'Find', text: 'Search hundreds of coupons from your favourite stores.' },
-    { icon: 'visibility', title: 'Reveal', text: 'Click "Show code" and copy it with one tap.' },
+    { icon: 'lock_open', title: 'Unlock', text: 'Sign up free (or log in) to reveal every coupon code.' },
     { icon: 'savings', title: 'Save', text: 'Paste the code at checkout and pay less.' },
   ];
 

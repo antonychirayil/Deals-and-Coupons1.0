@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, input, signal } from '@angular/core';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -31,6 +31,9 @@ export class Register {
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
 
+  // Filled from the URL, e.g. /register?returnUrl=/coupons (passed on from the login page)
+  readonly returnUrl = input<string>();
+
   protected readonly submitting = signal(false);
   protected readonly hidePassword = signal(true); // the eye icon toggles this
   protected readonly errorMessage = signal<string | null>(null);
@@ -54,7 +57,7 @@ export class Register {
     const { name, email, password } = this.form.getRawValue();
     // register() also logs the new user in, so we can go straight to the coupons
     this.authService.register({ name: name.trim(), email: email.trim(), password }).subscribe({
-      next: () => this.router.navigateByUrl('/coupons'),
+      next: () => this.router.navigateByUrl(this.returnUrl() ?? '/coupons'),
       error: (error) => {
         this.errorMessage.set(getErrorMessage(error));
         this.submitting.set(false);

@@ -8,7 +8,7 @@
     <div class="auth-header">
       <div class="auth-icon"><mat-icon>login</mat-icon></div>
       <h1>Welcome back</h1>
-      <p>Log in to see your saved coupons</p>
+      <p>Log in to see coupon codes and your saved coupons</p>
     </div>
 
     <!-- [formGroup] connects this <form> to the "form" object in login.ts -->
@@ -58,6 +58,9 @@
       </button>
     </form>
 
-    <p class="auth-footer">New here? <a routerLink="/register">Create an account</a></p>
+    <!-- Pass returnUrl on, so a new user also ends up back where they started -->
+    <p class="auth-footer">
+      New here? <a routerLink="/register" [queryParams]="{ returnUrl: returnUrl() }">Create an account</a>
+    </p>
   </mat-card>
 </section>
