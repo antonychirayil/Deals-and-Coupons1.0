@@ -47,7 +47,10 @@ Coupon codes are hidden **by the backend**, not just by the website: a guest's A
 | `auth-service` | 8082 | Sign up, log in, issues **JWT** login tokens. Passwords stored as **BCrypt** hashes. Creates the first admin at startup. |
 | `coupon-service` | 8081 | Coupons: search, filter, sort, paging, create/edit/delete. Leaves codes out for guests. |
 | `user-service` | 8083 | Profiles and saved coupons for the logged-in user. |
-| `frontend/deals-web` | 4200 | The website (Angular + Angular Material). |
+| `frontend/deals-web` | 4200 (dev) / 80 (Docker) | The website (Angular + Angular Material). In Docker, **nginx** serves it and forwards `/api/*` to the gateway. |
+
+In Docker, **only the website (port 80) is reachable from your PC**. The gateway and services sit on Docker's
+private network, so nobody can call a service directly and skip the gateway's rules.
 
 ---
 
@@ -59,7 +62,7 @@ Coupon codes are hidden **by the backend**, not just by the website: a guest's A
 | Frontend | Angular 22 (standalone components, signals), Angular Material 22 |
 | Database | MongoDB 8 (runs in Docker) |
 | Tests | JUnit 5, Mockito, MockMvc, Spring Boot test slices |
-| Tools | Maven Wrapper (`mvnw`), Angular CLI, Docker Compose, VS Code |
+| Tools | Maven Wrapper (`mvnw`), Angular CLI, Docker + Docker Compose, nginx, VS Code |
 
 ---
 
@@ -74,6 +77,7 @@ Deals-and-Coupons1.0/
 │   └── user-service/          profiles + saved coupons (client/CouponClient calls coupon-service)
 │       Each service:
 │       ├── pom.xml            dependencies
+│       ├── Dockerfile         how to build this service's Docker image
 │       ├── requests.http      ready-made API calls (VS Code REST Client extension)
 │       └── src/main/java/com/deals/<service>/
 │           ├── controller/    HTTP endpoints only
@@ -83,6 +87,9 @@ Deals-and-Coupons1.0/
 │           ├── dto/           what the API receives and returns (Java records)
 │           ├── exception/     custom errors + one global error handler
 │           └── config/        security, clock, ...
+├── frontend/deals-web/
+│   ├── Dockerfile             builds the app with Node, serves it with nginx
+│   └── nginx.conf             serves the website, forwards /api/* to the gateway
 ├── frontend/deals-web/src/
 │   ├── app/
 │   │   ├── core/              models, services (HTTP calls), interceptor, guards, utils
@@ -94,7 +101,7 @@ Deals-and-Coupons1.0/
 │   ├── material-theme.scss    colours, fonts (Material 3 theme)
 │   └── styles.css             global styles
 ├── scripts/seed-coupons.js    fills MongoDB with ~1000 test coupons
-├── docker-compose.yml         local MongoDB
+├── docker-compose.yml         MongoDB, or the whole system with --profile app
 ├── .env.example               template for secrets (copy to .env)
 ├── .vscode/                   recommended extensions, launch configs
 └── legacy/                    the original 2021 code (reference only)
@@ -104,14 +111,43 @@ Deals-and-Coupons1.0/
 
 ## Getting started
 
-### 1. Prerequisites
+There are two ways to run the project:
+
+- **A. Everything in Docker** – quickest; one command, nothing else to install except Docker.
+- **B. Development mode** – services run from VS Code and the website from `ng serve`, so code changes show up immediately.
+
+Both need the `.env` file from step 2 below.
+
+### A. Everything in Docker
+
+```powershell
+Copy-Item .env.example .env          # then fill in your own values (see step 2)
+docker compose --profile app up -d --build
+```
+
+Open **http://localhost**. The first build takes a few minutes (it downloads Maven, Node and all
+libraries); later builds reuse Docker's cache and are much faster.
+
+| Command | What it does |
+|---|---|
+| `docker compose --profile app ps` | list the containers and their status |
+| `docker compose --profile app logs -f gateway-service` | follow one service's log |
+| `docker compose --profile app up -d --build` | rebuild and restart after code changes |
+| `docker compose --profile app down` | stop everything (data is kept in the `mongo-data` volume) |
+
+Containers run with `-Duser.timezone=Asia/Kolkata` (see each `Dockerfile`), so dates read from MongoDB
+match development mode.
+
+### B. Development mode
+
+#### 1. Prerequisites
 
 - **JDK 25** (e.g. Eclipse Temurin) – no separate Maven install needed, each service has `mvnw`
 - **Node.js 24** and the **Angular CLI**: `npm install -g @angular/cli`
 - **Docker Desktop** (for MongoDB)
 - **VS Code** – open the folder and accept the recommended extensions
 
-### 2. Secrets
+#### 2. Secrets
 
 ```powershell
 Copy-Item .env.example .env
@@ -127,10 +163,10 @@ Open `.env` and set your own values:
 
 `.env` is in `.gitignore` – never commit it.
 
-### 3. Start MongoDB
+#### 3. Start MongoDB
 
 ```powershell
-docker compose up -d
+docker compose up -d        # without "--profile app": starts ONLY MongoDB
 ```
 
 Optional – add ~1000 test coupons (run from the project root):
@@ -140,7 +176,7 @@ docker cp scripts/seed-coupons.js deals-mongodb:/tmp/seed-coupons.js
 docker exec deals-mongodb mongosh -u <MONGO_ROOT_USERNAME> -p <MONGO_ROOT_PASSWORD> --authenticationDatabase admin deals_db --file /tmp/seed-coupons.js
 ```
 
-### 4. Start the backend
+#### 4. Start the backend
 
 **In VS Code:** *Run and Debug* panel → choose **"All backend services"** → ▶.
 (Or the Spring Boot Dashboard: select all four services → ▶.)
@@ -158,8 +194,10 @@ Each is ready when it prints `Started ...Application`. Health check: http://loca
 
 > Use one way at a time. Running services from a terminal while VS Code is also building the same
 > project can make devtools restart a service halfway through a rebuild.
+>
+> Both modes use the same MongoDB container, so coupons and accounts created in one show up in the other.
 
-### 5. Start the website
+#### 5. Start the website
 
 ```powershell
 cd frontend\deals-web
@@ -173,7 +211,7 @@ Open **http://localhost:4200**. Log in as admin with the `ADMIN_EMAIL` / `ADMIN_
 
 ## API
 
-All calls go through the gateway: `http://localhost:8080`. A login token is sent as
+All calls go through the gateway: `http://localhost:8080` in development mode, `http://localhost/api/...` in Docker. A login token is sent as
 `Authorization: Bearer <token>` (the Angular app does this automatically).
 
 | Method | Path | Who | Notes |
@@ -206,6 +244,8 @@ Each service's `requests.http` file has working examples.
   `code` only when one is present (`CouponController` → `CouponService` → `CouponResponse.from(..., includeCode)`).
   user-service passes the user's token on when it asks coupon-service for saved coupons.
 - **Dates** use one `Clock` in the `Asia/Kolkata` time zone, so coupons expire at midnight India time on any server.
+- **In Docker only the website is exposed.** Services have no published ports, so the admin-only rules in the
+  gateway can't be bypassed by calling a service directly.
 
 MongoDB database `deals_db`:
 
@@ -245,10 +285,9 @@ cd backend\coupon-service; .\mvnw test     # repeat for each service
 | 7 – Login & admin | Login/register pages, HTTP interceptor for the token, route guards, saved coupons, admin dashboard. |
 | 8 – Scale & redesign | Server-side search and paging (tested with 1000 coupons), batch lookups, gzip, Angular Material redesign, lazy-loaded pages. |
 | 8.1 – Fixes | Type-safe query field names, time-zone-aware `Clock` for coupon expiry, VS Code configuration cleanup. |
-| **8.2 – Members-only codes** | **Guests can browse every coupon, but codes are only sent to logged-in users.** Guests see "Log in to see code"; after logging in or signing up they return to the page they were on. |
+| 8.2 – Members-only codes | Guests can browse every coupon, but codes are only sent to logged-in users. Guests see "Log in to see code"; after logging in or signing up they return to the page they were on. |
+| **9 – Docker** | **A Dockerfile per service and for the website (nginx), one `docker-compose.yml` for the whole system. Only the website is exposed, closing the "call a service directly" gap. Service addresses are now environment variables with `localhost` defaults, so development mode is unchanged.** |
 
 ### Next
 
-- **Phase 9 – Docker:** package every service in a container and start everything with one `docker compose up`.
-  This also closes a known gap: today the services can be called directly on ports 8081–8083, bypassing the
-  gateway's admin-only rules. In Docker only the gateway will be reachable from outside.
+- **Continuous integration (GitHub Actions):** build and test every service automatically on each push.
