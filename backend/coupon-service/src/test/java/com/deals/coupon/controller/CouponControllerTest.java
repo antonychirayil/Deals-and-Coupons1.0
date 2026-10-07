@@ -1,8 +1,11 @@
 package com.deals.coupon.controller;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyBoolean;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -14,12 +17,14 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import com.deals.coupon.config.SecurityConfig;
 import com.deals.coupon.dto.CouponFilter;
 import com.deals.coupon.dto.CouponResponse;
 import com.deals.coupon.dto.PageResponse;
@@ -31,6 +36,7 @@ import com.deals.coupon.service.CouponService;
  * MockMvc sends fake HTTP requests; we check status codes and JSON.
  */
 @WebMvcTest(CouponController.class)
+@Import(SecurityConfig.class) // our security rules (test slices don't load @Configuration classes by themselves)
 class CouponControllerTest {
 
     @Autowired
@@ -44,7 +50,7 @@ class CouponControllerTest {
 
     @Test
     void searchCoupons_returnsOnePageWithPagingInfo() throws Exception {
-        when(couponService.searchCoupons(any(), any()))
+        when(couponService.searchCoupons(any(), any(), anyBoolean()))
                 .thenReturn(new PageResponse<>(List.of(sampleCoupon), 0, 12, 1, 1));
 
         mockMvc.perform(get("/api/coupons").param("search", "amazon").param("page", "0"))
@@ -56,7 +62,7 @@ class CouponControllerTest {
 
     @Test
     void searchCoupons_passesFiltersAndPagingToService() throws Exception {
-        when(couponService.searchCoupons(any(), any())).thenReturn(new PageResponse<>(List.of(), 2, 5, 0, 0));
+        when(couponService.searchCoupons(any(), any(), anyBoolean())).thenReturn(new PageResponse<>(List.of(), 2, 5, 0, 0));
 
         mockMvc.perform(get("/api/coupons")
                         .param("search", "pizza").param("category", "Food").param("includeExpired", "true")
@@ -66,12 +72,24 @@ class CouponControllerTest {
         // Records compare by their values, so verify() can check the exact filter and paging received
         verify(couponService).searchCoupons(
                 new CouponFilter("pizza", "Food", true),
-                PageRequest.of(2, 5, Sort.by(Sort.Direction.DESC, "discount")));
+                PageRequest.of(2, 5, Sort.by(Sort.Direction.DESC, "discount")),
+                false); // no token = guest = no codes
+    }
+
+    @Test
+    void searchCoupons_asLoggedInUser_asksForCodes() throws Exception {
+        when(couponService.searchCoupons(any(), any(), anyBoolean())).thenReturn(new PageResponse<>(List.of(), 0, 12, 0, 0));
+
+        // jwt() pretends the request carries a valid login token
+        mockMvc.perform(get("/api/coupons").with(jwt()))
+                .andExpect(status().isOk());
+
+        verify(couponService).searchCoupons(any(), any(), eq(true));
     }
 
     @Test
     void getCouponById_returns404WhenNotFound() throws Exception {
-        when(couponService.getCouponById("missing-id")).thenThrow(new CouponNotFoundException("missing-id"));
+        when(couponService.getCouponById("missing-id", false)).thenThrow(new CouponNotFoundException("missing-id"));
 
         mockMvc.perform(get("/api/coupons/missing-id"))
                 .andExpect(status().isNotFound())

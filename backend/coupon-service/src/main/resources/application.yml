@@ -23,6 +23,8 @@ server:
 
 app:
   time-zone: Asia/Kolkata # coupons expire at midnight India time (see config/TimeConfig.java)
+  jwt:
+    secret: ${JWT_SECRET} # the SAME secret as auth-service, so we can check its login tokens
 
 logging:
   level:

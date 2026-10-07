@@ -2,6 +2,7 @@ package com.deals.coupon.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
@@ -80,7 +81,7 @@ class CouponServiceTest {
     void getCouponById_throwsWhenNotFound() {
         when(couponRepository.findById("missing-id")).thenReturn(Optional.empty());
 
-        assertThrows(CouponNotFoundException.class, () -> couponService.getCouponById("missing-id"));
+        assertThrows(CouponNotFoundException.class, () -> couponService.getCouponById("missing-id", true));
     }
 
     @Test
@@ -109,7 +110,17 @@ class CouponServiceTest {
         when(couponRepository.findById("old")).thenReturn(Optional.of(endedYesterday));
         when(couponRepository.findById("now")).thenReturn(Optional.of(endsToday));
 
-        assertTrue(couponService.getCouponById("old").expired());  // a UTC clock would still say "valid"
-        assertFalse(couponService.getCouponById("now").expired()); // valid until the end of today
+        assertTrue(couponService.getCouponById("old", true).expired());  // a UTC clock would still say "valid"
+        assertFalse(couponService.getCouponById("now", true).expired()); // valid until the end of today
+    }
+
+    @Test
+    void getCouponById_hidesCodeFromGuestsOnly() {
+        Coupon coupon = new Coupon("SAVE20", "Amazon", "Electronics", "20% off", 20.0, LocalDate.of(2099, 1, 1));
+        when(couponRepository.findById("c1")).thenReturn(Optional.of(coupon));
+
+        assertNull(couponService.getCouponById("c1", false).code());               // guest: no code
+        assertEquals("SAVE20", couponService.getCouponById("c1", true).code());    // logged in: code
+        assertEquals("Amazon", couponService.getCouponById("c1", false).provider()); // guests still see the rest
     }
 }

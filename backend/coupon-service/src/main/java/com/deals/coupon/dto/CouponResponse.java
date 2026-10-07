@@ -19,11 +19,12 @@ public record CouponResponse(
 
     // Converts the database entity into the API shape.
     // "today" is passed in (from the service's Clock) instead of calling LocalDate.now() here.
-    public static CouponResponse from(Coupon coupon, LocalDate today) {
+    // includeCode = false for guests: they see the coupon, but "code" is null in the JSON.
+    public static CouponResponse from(Coupon coupon, LocalDate today, boolean includeCode) {
         boolean expired = coupon.getExpiryDate().isBefore(today);
         return new CouponResponse(
                 coupon.getId(),
-                coupon.getCode(),
+                includeCode ? coupon.getCode() : null,
                 coupon.getProvider(),
                 coupon.getCategory(),
                 coupon.getDescription(),

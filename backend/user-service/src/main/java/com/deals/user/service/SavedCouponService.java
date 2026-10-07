@@ -31,12 +31,12 @@ public class SavedCouponService {
         this.couponClient = couponClient;
     }
 
-    public List<SavedCouponResponse> getSavedCoupons(String userId) {
+    public List<SavedCouponResponse> getSavedCoupons(String userId, String userToken) {
         List<SavedCoupon> savedList = savedCouponRepository.findByUserIdOrderBySavedAtDesc(userId);
 
         // ONE call to coupon-service for all saved coupons (Phase 4 made one call per coupon)
         List<String> couponIds = savedList.stream().map(SavedCoupon::getCouponId).toList();
-        Map<String, CouponDto> couponsById = couponClient.findCoupons(couponIds).stream()
+        Map<String, CouponDto> couponsById = couponClient.findCoupons(couponIds, userToken).stream()
                 .collect(Collectors.toMap(CouponDto::id, coupon -> coupon));
 
         return savedList.stream()
@@ -46,13 +46,13 @@ public class SavedCouponService {
                 .toList();
     }
 
-    public SavedCouponResponse saveCoupon(String userId, String couponId) {
+    public SavedCouponResponse saveCoupon(String userId, String couponId, String userToken) {
         if (savedCouponRepository.existsByUserIdAndCouponId(userId, couponId)) {
             throw new CouponAlreadySavedException(couponId);
         }
 
         // Ask coupon-service first: never save an id that doesn't exist
-        CouponDto coupon = couponClient.findCoupon(couponId)
+        CouponDto coupon = couponClient.findCoupon(couponId, userToken)
                 .orElseThrow(() -> new CouponNotFoundException(couponId));
 
         SavedCoupon saved = savedCouponRepository.save(new SavedCoupon(userId, couponId, Instant.now()));

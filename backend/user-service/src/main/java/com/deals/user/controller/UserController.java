@@ -59,13 +59,14 @@ public class UserController {
 
     @GetMapping("/saved-coupons")
     public List<SavedCouponResponse> getSavedCoupons(@AuthenticationPrincipal Jwt jwt) {
-        return savedCouponService.getSavedCoupons(jwt.getSubject());
+        // getTokenValue() = the raw token text, passed on to coupon-service (see CouponClient)
+        return savedCouponService.getSavedCoupons(jwt.getSubject(), jwt.getTokenValue());
     }
 
     @PostMapping("/saved-coupons/{couponId}")
     @ResponseStatus(HttpStatus.CREATED)
     public SavedCouponResponse saveCoupon(@AuthenticationPrincipal Jwt jwt, @PathVariable String couponId) {
-        return savedCouponService.saveCoupon(jwt.getSubject(), couponId);
+        return savedCouponService.saveCoupon(jwt.getSubject(), couponId, jwt.getTokenValue());
     }
 
     @DeleteMapping("/saved-coupons/{couponId}")

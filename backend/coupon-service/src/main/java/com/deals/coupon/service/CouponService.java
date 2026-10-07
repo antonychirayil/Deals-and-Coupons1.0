@@ -36,9 +36,11 @@ public class CouponService {
         this.clock = clock;
     }
 
-    public PageResponse<CouponResponse> searchCoupons(CouponFilter filter, Pageable pageable) {
+    // includeCode: true only for logged-in users (the controller decides, from the login token)
+    public PageResponse<CouponResponse> searchCoupons(CouponFilter filter, Pageable pageable, boolean includeCode) {
         // Page.map() converts every Coupon on the page into a CouponResponse, keeping the page info
-        return PageResponse.from(couponRepository.search(filter, pageable).map(this::toResponse));
+        return PageResponse.from(couponRepository.search(filter, pageable)
+                .map(coupon -> toResponse(coupon, includeCode)));
     }
 
     public List<String> getCategories() {
@@ -46,14 +48,14 @@ public class CouponService {
     }
 
     // Used by user-service: fetch many coupons in ONE request instead of one request per coupon
-    public List<CouponResponse> getCouponsByIds(List<String> ids) {
+    public List<CouponResponse> getCouponsByIds(List<String> ids, boolean includeCode) {
         return couponRepository.findAllById(ids).stream()
-                .map(this::toResponse)
+                .map(coupon -> toResponse(coupon, includeCode))
                 .toList();
     }
 
-    public CouponResponse getCouponById(String id) {
-        return toResponse(findCouponOrThrow(id));
+    public CouponResponse getCouponById(String id, boolean includeCode) {
+        return toResponse(findCouponOrThrow(id), includeCode);
     }
 
     public CouponResponse createCoupon(CouponRequest request) {
@@ -67,7 +69,7 @@ public class CouponService {
         Coupon saved = couponRepository.save(coupon);
 
         log.info("Created coupon {} with id {}", saved.getCode(), saved.getId());
-        return toResponse(saved);
+        return toResponse(saved, true); // only admins can create coupons, so they see the code
     }
 
     public CouponResponse updateCoupon(String id, CouponRequest request) {
@@ -87,7 +89,7 @@ public class CouponService {
         coupon.setExpiryDate(request.expiryDate());
 
         log.info("Updated coupon {}", id);
-        return toResponse(couponRepository.save(coupon));
+        return toResponse(couponRepository.save(coupon), true);
     }
 
     public void deleteCoupon(String id) {
@@ -98,8 +100,8 @@ public class CouponService {
         log.info("Deleted coupon {}", id);
     }
 
-    private CouponResponse toResponse(Coupon coupon) {
-        return CouponResponse.from(coupon, LocalDate.now(clock));
+    private CouponResponse toResponse(Coupon coupon, boolean includeCode) {
+        return CouponResponse.from(coupon, LocalDate.now(clock), includeCode);
     }
 
     private Coupon findCouponOrThrow(String id) {
